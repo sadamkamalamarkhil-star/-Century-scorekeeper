@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101311">
+<title>Century Scorekeeper</title>
+<style>
+:root{
+  --bg:#04120e;
+  --bg2:#071f18;
+  --panel:#0b1713;
+  --panel2:#101c18;
+  --panel3:#14251f;
+  --line:#1d493b;
+  --line-soft:#17372e;
+  --text:#f8fafc;
+  --muted:#93a39d;
+  --accent:#10b981;
+  --accent-soft:#123d30;
+  --gold:#f59e0b;
+  --gold-soft:rgba(245,158,11,.12);
+  --danger:#fb7185;
+  --red:#be123c;
+  --yellow:#eab308;
+  --green:#16a34a;
+  --brown:#92400e;
+  --blue:#2563eb;
+  --pink:#ec4899;
+  --black:#0f172a;
+  --shadow:0 14px 42px rgba(0,0,0,.34);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#04120e;color:var(--text);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 50% 25%,rgba(19,84,66,.36) 0,rgba(10,45,36,.18) 35%,transparent 62%),
+    linear-gradient(180deg,#071a14 0%,#04120e 46%,#020b08 100%);
+  -webkit-font-smoothing:antialiased;
+  touch-action:manipulation;
+}
+button,input,select{font:inherit}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+button:active{transform:scale(.975)}
+.app{width:min(100%,920px);margin:0 auto;padding:14px 14px calc(28px + env(safe-area-inset-bottom))}
+.top{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:4px 2px 13px;border-bottom:1px solid rgba(16,185,129,.14);margin-bottom:12px
+}
+.brandWrap{display:flex;align-items:center;gap:11px;min-width:0}
+.logoOrb{
+  width:44px;height:44px;flex:0 0 auto;border-radius:16px;display:grid;place-items:center;
+  background:radial-gradient(circle at 38% 32%,#1f7058 0,#0d3b2e 48%,#061d17 100%);
+  border:1px solid rgba(245,158,11,.48);box-shadow:0 0 24px rgba(245,158,11,.18);
+  color:var(--gold);font-size:20px;font-weight:900
+}
+.brand{font-weight:900;letter-spacing:-.025em;font-size:20px;color:#fff;display:flex;align-items:center;gap:7px;white-space:nowrap}
+.brandBadge{
+  font-size:9px;line-height:1;padding:5px 7px;border-radius:999px;
+  border:1px solid rgba(245,158,11,.34);background:rgba(245,158,11,.1);color:#fbbf24;
+  letter-spacing:.1em;text-transform:uppercase;font-weight:900
+}
+.subtitle{font-size:10px;color:rgba(52,211,153,.68);font-weight:700;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mode{
+  display:grid;grid-template-columns:1fr 1fr;background:rgba(2,10,8,.74);padding:4px;
+  border:1px solid rgba(51,65,85,.7);border-radius:15px;min-width:190px;box-shadow:inset 0 0 18px rgba(0,0,0,.2)
+}
+.mode button{
+  border:1px solid transparent;border-radius:11px;padding:10px 13px;background:transparent;
+  color:#82928c;font-size:11px;font-weight:900;transition:.15s
+}
+.mode button.active{
+  color:#fcd34d;background:rgba(245,158,11,.13);border-color:rgba(245,158,11,.42);
+  box-shadow:0 0 18px rgba(245,158,11,.1)
+}
+.toolbar{
+  display:flex;align-items:center;justify-content:space-between;gap:9px;margin-bottom:11px;
+  background:rgba(10,20,17,.88);border:1px solid rgba(16,185,129,.2);border-radius:17px;padding:9px 10px;
+  box-shadow:0 10px 26px rgba(0,0,0,.16);backdrop-filter:blur(10px)
+}
+.chips{display:flex;gap:6px;align-items:center;flex-wrap:wrap;min-width:0}
+.chip{
+  background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.23);color:#fbbf24;
+  font-size:9px;font-weight:900;border-radius:10px;padding:6px 8px;text-transform:uppercase;letter-spacing:.07em
+}
+.chip.good{color:#6ee7b7;border-color:rgba(16,185,129,.32);background:rgba(16,185,129,.09)}
+.actions{display:flex;gap:5px;flex-shrink:0}
+.iconBtn{
+  width:37px;height:37px;border-radius:11px;border:1px solid rgba(71,85,105,.72);
+  background:rgba(30,41,59,.64);color:#d9e3df;font-size:17px;display:grid;place-items:center;
+  transition:.15s;box-shadow:inset 0 1px rgba(255,255,255,.03)
+}
+.iconBtn:hover{border-color:rgba(245,158,11,.42);color:#fbbf24;background:rgba(51,65,85,.72)}
+.iconBtn:disabled{opacity:.26}
+.players{display:grid;gap:9px}
+.players.p2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.players.p3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.players.p4{grid-template-columns:repeat(2,minmax(0,1fr))}
+.player{
+  min-width:0;border:1px solid rgba(51,65,85,.7);
+  background:linear-gradient(160deg,rgba(15,23,42,.93),rgba(6,31,24,.9));
+  border-radius:20px;padding:12px;text-align:left;color:var(--text);position:relative;overflow:hidden;
+  box-shadow:0 10px 28px rgba(0,0,0,.22);transition:.18s
+}
+.player:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 100% 0,rgba(16,185,129,.08),transparent 40%);pointer-events:none}
+.player.active{
+  border-color:#10b981;box-shadow:0 0 25px rgba(16,185,129,.25),0 12px 28px rgba(0,0,0,.28);
+  outline:1px solid rgba(16,185,129,.35);outline-offset:-2px
+}
+.player .name{font-size:11px;color:#d1ddd8;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;position:relative}
+.player.active .name{color:#fbbf24}
+.player .score{font-size:38px;line-height:1;font-weight:900;margin:7px 0 5px;font-variant-numeric:tabular-nums;position:relative}
+.player .meta{font-size:9px;color:#83928c;font-weight:700;position:relative}
+.progress{height:5px;background:#17231f;border-radius:999px;overflow:hidden;margin-top:8px;position:relative}
+.progress>i{display:block;height:100%;background:linear-gradient(90deg,#10b981,#f59e0b,#fb7185);border-radius:999px}
+.badge{
+  display:inline-flex;align-items:center;gap:4px;margin-top:8px;background:rgba(16,185,129,.12);color:#6ee7b7;
+  border:1px solid rgba(16,185,129,.3);padding:4px 7px;border-radius:999px;font-size:8px;font-weight:900;letter-spacing:.05em
+}
+.status{
+  margin-top:10px;background:rgba(15,23,42,.82);border:1px solid rgba(16,185,129,.2);border-radius:16px;
+  padding:10px 12px;display:flex;justify-content:space-between;gap:8px;font-size:10px;color:#8fa19a;flex-wrap:wrap;
+  box-shadow:0 8px 22px rgba(0,0,0,.15)
+}
+.status b{color:#fff;font-size:12px}.status span:first-child b{color:#fbbf24}
+.passPanel{
+  margin-top:9px;border:1px solid rgba(245,158,11,.36);
+  background:linear-gradient(135deg,rgba(190,18,60,.11),rgba(245,158,11,.055));
+  border-radius:16px;padding:10px;box-shadow:0 0 22px rgba(245,158,11,.07)
+}
+.passTitle{font-size:9px;color:#fbbf24;font-weight:900;text-transform:uppercase;letter-spacing:.11em;margin-bottom:7px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.four{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ballGrid{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px;
+  background:linear-gradient(160deg,rgba(15,23,42,.82),rgba(6,31,24,.68));
+  border:1px solid rgba(27,99,78,.34);border-radius:20px;padding:10px
+}
+.ball{
+  height:66px;border-radius:16px;border:1px solid rgba(255,255,255,.12);font-weight:900;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-shadow:inset -4px -5px 9px rgba(0,0,0,.42),0 7px 16px rgba(0,0,0,.24);transition:.14s
+}
+.ball:not(:disabled){outline:1px solid rgba(245,158,11,.22);outline-offset:-2px}
+.ball:not(:disabled):hover{filter:brightness(1.08);box-shadow:inset -4px -5px 9px rgba(0,0,0,.35),0 0 16px rgba(245,158,11,.2)}
+.ball strong{font-size:22px;line-height:1}.ball span{font-size:8px;letter-spacing:.06em;margin-top:5px;text-transform:uppercase}
+.ball:disabled{opacity:.28;filter:grayscale(.6);cursor:not-allowed}
+.red{background:linear-gradient(145deg,#e11d48,#881337);color:white}
+.yellow{background:linear-gradient(145deg,#fde047,#ca8a04);color:#171717}
+.green{background:linear-gradient(145deg,#22c55e,#166534);color:white}
+.brown{background:linear-gradient(145deg,#b45309,#713f12);color:white}
+.blue{background:linear-gradient(145deg,#3b82f6,#1e40af);color:white}
+.pink{background:linear-gradient(145deg,#f472b6,#be185d);color:#171717}
+.black{background:linear-gradient(145deg,#263246,#05070a);color:white}
+.secondary,.danger,.primary,.smallBtn,.option,.tab,.filter,.close{transition:.14s}
+.secondary{
+  background:rgba(30,41,59,.72);border:1px solid rgba(71,85,105,.72);color:#e8efec;
+  border-radius:14px;padding:12px;font-weight:850
+}
+.secondary:hover{background:rgba(51,65,85,.8);border-color:rgba(245,158,11,.28)}
+.danger{
+  background:rgba(120,53,15,.2);border:1px solid rgba(245,158,11,.35);color:#fcd34d;
+  border-radius:14px;padding:12px;font-weight:850
+}
+.danger:hover{background:rgba(146,64,14,.3)}
+.primary{
+  background:linear-gradient(145deg,#135442,#0d3b2e);border:1px solid rgba(245,158,11,.38);color:#fff;
+  border-radius:14px;padding:12px;font-weight:900;box-shadow:0 0 22px rgba(245,158,11,.09)
+}
+.controls{margin-top:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.controls.century{grid-template-columns:repeat(2,1fr)}
+.panel{
+  margin-top:8px;border:1px solid rgba(27,99,78,.4);
+  background:linear-gradient(150deg,rgba(15,23,42,.94),rgba(7,31,24,.92));
+  border-radius:17px;padding:10px;box-shadow:0 8px 22px rgba(0,0,0,.18)
+}
+.panelLabel{font-size:9px;text-transform:uppercase;letter-spacing:.11em;color:#fbbf24;margin-bottom:7px;font-weight:900}
+.recent{
+  margin-top:12px;border:1px solid rgba(27,99,78,.28);
+  background:rgba(7,20,16,.5);border-radius:17px;padding:10px
+}
+.recentHead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.recentHead .label{font-size:9px;color:#fbbf24;text-transform:uppercase;letter-spacing:.12em;font-weight:900}
+.smallBtn{
+  border:1px solid rgba(71,85,105,.65);background:rgba(30,41,59,.62);color:#9fb0a8;
+  border-radius:9px;padding:7px 9px;font-size:9px;font-weight:900
+}
+.smallBtn:hover{color:#fbbf24;border-color:rgba(245,158,11,.35)}
+.logline{
+  font-size:10px;color:#aab8b2;background:rgba(15,23,42,.62);border:1px solid rgba(51,65,85,.48);
+  border-radius:9px;padding:8px 9px;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+.winner{
+  margin-top:11px;border:1px solid rgba(245,158,11,.42);
+  background:radial-gradient(circle at 50% 0,rgba(245,158,11,.12),transparent 42%),linear-gradient(160deg,rgba(15,23,42,.96),rgba(6,31,24,.94));
+  border-radius:23px;padding:19px;text-align:center;box-shadow:0 0 28px rgba(245,158,11,.12),var(--shadow)
+}
+.winner .eyebrow{font-size:9px;color:#fbbf24;text-transform:uppercase;letter-spacing:.16em;font-weight:900}
+.winner h2{margin:6px 0 10px;font-size:26px}.finalRow{display:flex;justify-content:space-between;gap:10px;font-size:11px;padding:5px 0;color:#93a39d}.finalRow b{color:#f8fafc}
+.sheetBackdrop{
+  position:fixed;inset:0;background:rgba(2,6,5,.84);display:none;align-items:center;justify-content:center;
+  z-index:50;padding:14px;backdrop-filter:blur(10px)
+}
+.sheetBackdrop.show{display:flex}
+.sheet{
+  width:min(100%,590px);max-height:90vh;background:linear-gradient(160deg,#0f172a,#071f18);
+  border:1px solid rgba(245,158,11,.35);border-radius:26px;padding:14px 14px calc(18px + env(safe-area-inset-bottom));
+  overflow:auto;box-shadow:0 0 28px rgba(245,158,11,.12),0 26px 60px rgba(0,0,0,.5)
+}
+.sheetHead{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;position:sticky;top:-14px;
+  background:linear-gradient(180deg,#0e1723 75%,rgba(14,23,35,.94));padding:10px 0;z-index:2
+}
+.sheetTitle{font-size:13px;text-transform:uppercase;letter-spacing:.12em;font-weight:900;color:#fff}
+.close{width:35px;height:35px;border:1px solid rgba(71,85,105,.72);background:#1e293b;color:#cbd5e1;border-radius:11px}
+.tabs,.filters{display:flex;gap:6px;overflow:auto;padding-bottom:5px}
+.tab,.filter{
+  white-space:nowrap;border:1px solid rgba(71,85,105,.64);background:rgba(15,23,42,.8);color:#94a3b8;
+  padding:9px 11px;border-radius:11px;font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.05em
+}
+.tab.active,.filter.active{background:rgba(245,158,11,.15);color:#fbbf24;border-color:rgba(245,158,11,.45)}
+.sectionTitle{font-size:9px;color:#fbbf24;text-transform:uppercase;letter-spacing:.13em;font-weight:900;margin:15px 0 7px}
+.field{margin-top:10px}
+.field label{display:block;font-size:9px;color:#a3b2ac;margin-bottom:5px;text-transform:uppercase;letter-spacing:.1em;font-weight:800}
+.field input,.field select{
+  width:100%;background:#1e293b;color:#f8fafc;border:1px solid #334155;border-radius:13px;padding:12px;font-size:16px;outline:none
+}
+.field input:focus,.field select:focus{border-color:#f59e0b;box-shadow:0 0 0 2px rgba(245,158,11,.1)}
+.inlineOptions{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.option{border:1px solid #334155;background:#1e293b;color:#cbd5e1;border-radius:12px;padding:11px;font-weight:850}
+.option.active{background:rgba(245,158,11,.14);color:#fbbf24;border-color:rgba(245,158,11,.45)}
+.resultCard,.statCard{
+  border:1px solid rgba(51,65,85,.72);background:linear-gradient(155deg,rgba(15,23,42,.92),rgba(6,31,24,.72));
+  border-radius:15px;padding:11px;margin-top:8px
+}
+.resultTop{display:flex;justify-content:space-between;gap:8px}.resultMode{font-size:8px;text-transform:uppercase;color:#fbbf24;font-weight:900;letter-spacing:.11em}
+.resultDate{font-size:9px;color:#718079}.resultWinner{font-weight:900;margin-top:5px;font-size:13px}.resultScores{font-size:10px;color:#9ba9a3;margin-top:4px}
+.resultDetails{display:none;border-top:1px solid rgba(51,65,85,.6);margin-top:8px;padding-top:7px}.resultCard.open .resultDetails{display:block}
+.statName{font-weight:900;color:#f8fafc}.statGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.statBox{background:rgba(30,41,59,.62);border:1px solid rgba(51,65,85,.55);border-radius:10px;padding:8px;text-align:center}.statBox strong{display:block;font-size:15px}.statBox span{font-size:7px;text-transform:uppercase;color:#8b9a94}
+.empty{padding:28px 10px;text-align:center;color:#7f8f88;font-size:11px}
+.summary{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:10px 0}.summary>div{background:rgba(15,23,42,.72);border:1px solid rgba(27,99,78,.36);border-radius:12px;padding:10px;text-align:center}.summary strong{display:block;font-size:19px}.summary span{font-size:8px;color:#8d9d96;text-transform:uppercase}
+.toast{
+  position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  background:#17241f;color:#f8fafc;border:1px solid rgba(245,158,11,.32);border-radius:999px;padding:9px 13px;
+  font-size:10px;z-index:80;opacity:0;pointer-events:none;transition:.2s;max-width:90vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  box-shadow:0 10px 30px rgba(0,0,0,.38)
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
+.confirmBar{margin-top:8px;border:1px solid rgba(245,158,11,.32);background:rgba(120,53,15,.14);border-radius:14px;padding:10px}
+.confirmBar p{margin:0 0 9px;font-size:11px;color:#e8ddd0}.row{display:flex;gap:7px}.row>*{flex:1}.kicker{font-size:9px;color:#86968f;margin-top:6px}
+@media(max-width:600px){
+  .app{padding:11px 10px calc(24px + env(safe-area-inset-bottom))}
+  .top{align-items:flex-start}.brand{font-size:17px}.brandBadge{display:none}.subtitle{max-width:200px}
+  .mode{min-width:150px}.mode button{padding:9px 8px;font-size:10px}.logoOrb{width:40px;height:40px;border-radius:14px}
+  .toolbar{padding:8px}.iconBtn{width:35px;height:35px}.player{padding:10px;border-radius:17px}.player .score{font-size:33px}
+  .ballGrid{padding:8px;gap:7px;border-radius:17px}.ball{height:62px;border-radius:14px}.ball strong{font-size:20px}
+}
+@media(max-width:370px){
+  .brandWrap{gap:7px}.subtitle{display:none}.mode{min-width:142px}.players{gap:6px}.player{padding:8px}.player .score{font-size:29px}
+  .ballGrid{gap:6px}.ball{height:59px}.actions{gap:3px}.iconBtn{width:33px;height:33px}.chip{padding:5px 6px;font-size:8px}
+}
+</style>
+</head>
+<body>
+<div id="app" class="app"></div>
+<div id="sheetBackdrop" class="sheetBackdrop"><div id="sheet" class="sheet"></div></div>
+<div id="toast" class="toast"></div>
+<script>
+(()=>{"use strict";
+const K={mode:"centurySnooker.mode.v4",results:"centurySnooker.results.v4",cSettings:"centurySnooker.century.settings.v4",cState:"centurySnooker.century.state.v4",cTimeline:"centurySnooker.century.timeline.v4",sSettings:"centurySnooker.snooker.settings.v4",sState:"centurySnooker.snooker.state.v4",sTimeline:"centurySnooker.snooker.timeline.v4"};
+const LEGACY={cSettings:["century.settings.v1"],cState:["century.state.v1"],sSettings:["snooker.settings.v1"],sState:["snooker.state.v1"],mode:["app.mode.v1"],results:["scorekeeper.results.v1"]};
+const now=()=>Date.now(),uid=()=>Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8),clone=o=>JSON.parse(JSON.stringify(o)),clamp=(n,a,b)=>Math.max(a,Math.min(b,Number(n)||0));
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
+function read(key,f){try{const v=localStorage.getItem(key);return v===null?f:JSON.parse(v)}catch{return f}}function write(key,v){try{localStorage.setItem(key,JSON.stringify(v))}catch{}}
+function readAny(p,ls,f){const a=localStorage.getItem(p);if(a!==null){try{return JSON.parse(a)}catch{}}for(const k of ls||[]){const v=localStorage.getItem(k);if(v!==null){try{return JSON.parse(v)}catch{}}}return f}
+function fmtTime(t){if(!t)return"earlier";return new Date(t).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit",second:"2-digit"})}function fmtDate(t){if(!t)return"—";return new Date(t).toLocaleString([],{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"})}function fmtDuration(ms){if(!ms||ms<0)return"—";const m=Math.round(ms/60000);return m<60?m+" min":Math.floor(m/60)+"h "+(m%60)+"m"}
+function logEntry(text){return{t:now(),text}}function migrateLog(raw){if(!Array.isArray(raw))return[];return raw.map(x=>typeof x==="string"?{t:0,text:x}:x&&typeof x.text==="string"?{t:Number(x.t)||0,text:x.text}:null).filter(Boolean).slice(0,200)}function pushLog(s,t){s.log=[logEntry(t),...(s.log||[])].slice(0,200)}
+function showToast(text){const t=document.getElementById("toast");t.textContent=text;t.classList.add("show");clearTimeout(showToast._timer);showToast._timer=setTimeout(()=>t.classList.remove("show"),1600)}
+function migrateResults(raw){if(!Array.isArray(raw))return[];return raw.filter(r=>r&&r.id&&Array.isArray(r.players)&&Array.isArray(r.scores)).map(r=>({...r,best:Array.isArray(r.best)?r.best:[]}))}
+let results=migrateResults(readAny(K.results,LEGACY.results,[]));write(K.results,results);function saveResults(){results=[...results].sort((a,b)=>(b.endedAt||0)-(a.endedAt||0)).slice(0,200);write(K.results,results)}function upsertResult(r){const i=results.findIndex(x=>x.id===r.id);if(i>=0)results[i]=r;else results.push(r);saveResults()}function removeResult(id){const n=results.filter(x=>x.id!==id);if(n.length!==results.length){results=n;saveResults()}}function clearResults(){results=[];saveResults()}
+function computeStats(filter="all"){const map=new Map();[...results].sort((a,b)=>b.endedAt-a.endedAt).forEach(r=>{if(filter!=="all"&&r.mode!==filter)return;r.players.forEach((raw,i)=>{const name=(raw||("Player "+(i+1))).trim(),key=name.toLowerCase();if(!map.has(key))map.set(key,{name,played:0,wins:0,losses:0,points:0,cGames:0,cWins:0,cBest:0,cPoints:0,sFrames:0,sWins:0,sBest:0,sPoints:0});const p=map.get(key),won=r.winner===i,pts=Number(r.scores[i]||0),best=Number((r.best||[])[i]||0);p.played++;p.points+=pts;if(won)p.wins++;else p.losses++;if(r.mode==="century"){p.cGames++;p.cPoints+=pts;p.cBest=Math.max(p.cBest,best);if(won)p.cWins++}else{p.sFrames++;p.sPoints+=pts;p.sBest=Math.max(p.sBest,best);if(won)p.sWins++}})});return[...map.values()].sort((a,b)=>b.played-a.played||b.wins-a.wins)}
+const cDefaults={names:["Player 1","Player 2","Player 3","Player 4"],playerCount:3,target:100,protectMode:"shooter",manualProtect:true,exactTarget:false};
+function migrateCSettings(raw){const s={...cDefaults,...(raw||{})};let names=Array.isArray(s.names)?s.names.slice(0,4):[];while(names.length<4)names.push("Player "+(names.length+1));s.names=names;s.playerCount=clamp(s.playerCount||3,2,4);s.target=clamp(s.target||100,20,1000);return s}
+function newCentury(s){return{gameId:uid(),startedAt:now(),endedAt:null,players:Array.from({length:s.playerCount},()=>({score:0,freeReds:0,best:0})),active:0,visit:0,log:[],winner:null}}
+function migrateCState(raw,s){if(!raw||typeof raw!=="object")return newCentury(s);const base=newCentury(s),oldHist=raw.log??raw.history??[];const ps=Array.isArray(raw.players)?raw.players.map(p=>({score:Number(p.score)||0,freeReds:typeof p.freeReds==="number"?Math.max(0,Math.floor(p.freeReds)):(p.freeRed?1:0),best:Number(p.best)||0})):[];while(ps.length<s.playerCount)ps.push({score:0,freeReds:0,best:0});ps.length=s.playerCount;return{...base,...raw,gameId:typeof raw.gameId==="string"?raw.gameId:base.gameId,startedAt:Number(raw.startedAt)||base.startedAt,endedAt:Number(raw.endedAt)||null,players:ps,active:Math.min(Number(raw.active)||0,s.playerCount-1),visit:Number(raw.visit)||0,log:migrateLog(oldHist),winner:Number.isInteger(raw.winner)?raw.winner:null}}
+let cSettings=migrateCSettings(readAny(K.cSettings,LEGACY.cSettings,null)),cState=migrateCState(readAny(K.cState,LEGACY.cState,null),cSettings),cTL=read(K.cTimeline,{past:[],future:[]});if(!Array.isArray(cTL.past))cTL.past=[];if(!Array.isArray(cTL.future))cTL.future=[];
+function saveCentury(){write(K.cSettings,cSettings);write(K.cState,cState);write(K.cTimeline,{past:cTL.past.slice(0,15),future:cTL.future.slice(0,15)})}
+function cProtected(st=cState){const half=cSettings.target/2;if(cSettings.protectMode==="manual")return!!cSettings.manualProtect;if(cSettings.protectMode==="leader")return Math.max(...st.players.map(p=>p.score))<half;return st.players[st.active].score<half}
+function cCanScore(v){return!cSettings.exactTarget||cState.players[cState.active].score+v<=cSettings.target}
+function cCheckWin(st,reason){const p=st.players[st.active],win=cSettings.exactTarget?p.score===cSettings.target:p.score>=cSettings.target;if(win&&st.winner===null){st.winner=st.active;st.endedAt=now();pushLog(st,cSettings.names[st.active]+" wins · "+reason)}}
+function cApply(mut,toast=true){cTL.past=[clone(cState),...cTL.past].slice(0,40);cTL.future=[];const st=clone(cState);mut(st);cState=st;saveCentury();syncCResult();render();if(toast&&st.log[0])showToast(st.log[0].text)}
+function cUndo(){if(!cTL.past.length)return;cTL.future=[clone(cState),...cTL.future].slice(0,40);cState=cTL.past.shift();saveCentury();syncCResult();render()}function cRedo(){if(!cTL.future.length)return;cTL.past=[clone(cState),...cTL.past].slice(0,40);cState=cTL.future.shift();saveCentury();syncCResult();render()}
+function cPot(name,v,free=false){if(!cCanScore(v))return;cApply(st=>{const p=st.players[st.active];p.score+=v;st.visit+=v;p.best=Math.max(p.best,st.visit);pushLog(st,cSettings.names[st.active]+" "+(free?"free red potted":"potted "+name)+" +"+v+(free?" · pass kept":""));cCheckWin(st,cSettings.exactTarget?"exact target":"target reached")})}
+function cMissNext(){cApply(st=>{pushLog(st,cSettings.names[st.active]+" missed · turn ends");st.active=(st.active+1)%st.players.length;st.visit=0})}
+function cMissRed(){cApply(st=>{const who=cSettings.names[st.active];if(cProtected(st)){st.players.forEach((p,i)=>{if(i!==st.active)p.freeReds++});pushLog(st,who+" missed red · +1 free-red pass to others")}else{st.players[st.active].score-=10;pushLog(st,who+" missed red −10")}st.active=(st.active+1)%st.players.length;st.visit=0})}
+function cFreeMiss(){cApply(st=>{const p=st.players[st.active];p.freeReds=Math.max(0,p.freeReds-1);pushLog(st,cSettings.names[st.active]+" missed free red · 1 pass spent");st.active=(st.active+1)%st.players.length;st.visit=0})}
+function cFoul(v){cApply(st=>{st.players[st.active].score-=v;pushLog(st,cSettings.names[st.active]+" foul −"+v);st.active=(st.active+1)%st.players.length;st.visit=0})}
+function cSelect(i){if(i===cState.active||cState.winner!==null)return;cApply(st=>{st.active=i;st.visit=0;pushLog(st,"Turn → "+cSettings.names[i])})}
+function cBuildResult(){if(cState.winner===null)return null;const players=cState.players.map((_,i)=>cSettings.names[i]||("Player "+(i+1)));return{id:cState.gameId,mode:"century",startedAt:cState.startedAt,endedAt:cState.endedAt||now(),players,scores:cState.players.map(p=>p.score),winner:cState.winner,losers:players.filter((_,i)=>i!==cState.winner),best:cState.players.map(p=>p.best),reason:cSettings.exactTarget?"exact target":"target reached",target:cSettings.target,playerCount:cState.players.length,actions:cState.log.length}}
+function syncCResult(){const r=cBuildResult();if(r)upsertResult(r);else removeResult(cState.gameId)}function cHasProgress(){return cState.log.length>0||cState.players.some(p=>p.score!==0||p.freeReds>0)}function cReset(){cState=newCentury(cSettings);cTL={past:[],future:[]};saveCentury();syncCResult();render()}
+function changePlayerCount(n){n=clamp(n,2,4);cSettings.playerCount=n;while(cSettings.names.length<4)cSettings.names.push("Player "+(cSettings.names.length+1));cApply(st=>{st.players=st.players.slice(0,n);while(st.players.length<n)st.players.push({score:0,freeReds:0,best:0});st.active=Math.min(st.active,n-1);if(st.winner!==null&&st.winner>=n)st.winner=null},false);saveCentury()}
+const colors=[["yellow","Yellow",2],["green","Green",3],["brown","Brown",4],["blue","Blue",5],["pink","Pink",6],["black","Black",7]],val={yellow:2,green:3,brown:4,blue:5,pink:6,black:7},clearance=["yellow","green","brown","blue","pink","black"];
+const sDefaults={names:["Player 1","Player 2"],startingReds:15};function migrateSSettings(raw){const s={...sDefaults,...(raw||{})};s.names=Array.isArray(s.names)?s.names.slice(0,2):["Player 1","Player 2"];while(s.names.length<2)s.names.push("Player "+(s.names.length+1));s.startingReds=clamp(Math.floor(s.startingReds||15),1,15);return s}
+function newSnooker(s){return{gameId:uid(),startedAt:now(),endedAt:null,startingReds:s.startingReds,scores:[0,0],best:[0,0],active:0,break:0,reds:s.startingReds,ballOn:"red",clearance:false,respotted:false,log:[],winner:null,reason:null}}
+function migrateSState(raw,s){if(!raw||typeof raw!=="object")return newSnooker(s);const b=newSnooker(s),hist=raw.log??raw.history??[];return{...b,...raw,gameId:typeof raw.gameId==="string"?raw.gameId:b.gameId,startedAt:Number(raw.startedAt)||b.startedAt,endedAt:Number(raw.endedAt)||null,startingReds:clamp(raw.startingReds||raw.reds||s.startingReds,1,15),scores:[Number(raw.scores?.[0])||0,Number(raw.scores?.[1])||0],best:[Number(raw.best?.[0])||0,Number(raw.best?.[1])||0],active:raw.active===1?1:0,break:Number(raw.break)||0,reds:clamp(Number(raw.reds??b.reds),0,15),ballOn:raw.ballOn||"red",clearance:!!raw.clearance,respotted:!!raw.respotted,log:migrateLog(hist),winner:(raw.winner===0||raw.winner===1)?raw.winner:null,reason:typeof raw.reason==="string"?raw.reason:null}}
+let sSettings=migrateSSettings(readAny(K.sSettings,LEGACY.sSettings,null)),sState=migrateSState(readAny(K.sState,LEGACY.sState,null),sSettings),sTL=read(K.sTimeline,{past:[],future:[]}),freeBallOnValue=null;if(!Array.isArray(sTL.past))sTL.past=[];if(!Array.isArray(sTL.future))sTL.future=[];
+function saveSnooker(){write(K.sSettings,sSettings);write(K.sState,sState);write(K.sTimeline,{past:sTL.past.slice(0,15),future:sTL.future.slice(0,15)})}function sApply(mut,toast=true){sTL.past=[clone(sState),...sTL.past].slice(0,40);sTL.future=[];const st=clone(sState);mut(st);sState=st;freeBallOnValue=null;saveSnooker();syncSResult();render();if(toast&&st.log[0])showToast(st.log[0].text)}function sUndo(){if(!sTL.past.length)return;sTL.future=[clone(sState),...sTL.future].slice(0,40);sState=sTL.past.shift();saveSnooker();syncSResult();render()}function sRedo(){if(!sTL.future.length)return;sTL.past=[clone(sState),...sTL.past].slice(0,40);sState=sTL.future.shift();saveSnooker();syncSResult();render()}
+function sAdd(st,v){st.scores[st.active]+=v;st.break+=v;st.best[st.active]=Math.max(st.best[st.active],st.break)}function sWin(st,idx,reason){st.winner=idx;st.reason=reason;st.endedAt=now();pushLog(st,sSettings.names[idx]+" wins frame · "+st.scores[0]+"–"+st.scores[1])}function sFinish(st){if(st.scores[0]===st.scores[1]){st.respotted=true;st.clearance=true;st.ballOn="black";pushLog(st,"Scores level · respotted black")}else sWin(st,st.scores[0]>st.scores[1]?0:1,"final black")}
+function sCanPot(ball){if(sState.winner!==null)return false;if(sState.respotted)return ball==="black";if(sState.clearance)return ball===sState.ballOn;if(sState.ballOn==="red")return ball==="red";return ball!=="red"}
+function sPot(ball){if(!sCanPot(ball))return;sApply(st=>{const who=sSettings.names[st.active];if(st.respotted){sAdd(st,7);pushLog(st,who+" potted respotted black +7");sWin(st,st.active,"respotted black");return}if(ball==="red"){sAdd(st,1);st.reds=Math.max(0,st.reds-1);st.ballOn="colour";pushLog(st,who+" potted red +1");return}const v=val[ball];sAdd(st,v);pushLog(st,who+" potted "+ball+" +"+v);if(st.clearance){const i=clearance.indexOf(ball);if(i===5)sFinish(st);else st.ballOn=clearance[i+1];return}if(st.reds>0)st.ballOn="red";else{st.clearance=true;st.ballOn="yellow"}})}
+function sMiss(){sApply(st=>{pushLog(st,sSettings.names[st.active]+" missed · break "+st.break);if(!(st.respotted||st.clearance)){if(st.ballOn==="colour"&&st.reds===0){st.clearance=true;st.ballOn="yellow"}else st.ballOn="red"}st.active=1-st.active;st.break=0})}
+function sFoul(p){sApply(st=>{const opp=1-st.active,who=sSettings.names[st.active];st.scores[opp]+=p;pushLog(st,who+" fouled · +"+p+" to "+sSettings.names[opp]);if(st.respotted){sWin(st,opp,"respotted black");return}if(!st.clearance){if(st.ballOn==="colour"&&st.reds===0){st.clearance=true;st.ballOn="yellow"}else st.ballOn="red"}st.active=opp;st.break=0})}
+function sFreeBall(nominated){if(sState.respotted||sState.winner!==null)return;if(sState.ballOn==="colour"&&!sState.clearance&&!freeBallOnValue)return;sApply(st=>{const who=sSettings.names[st.active];if(st.ballOn==="red"){sAdd(st,1);st.ballOn="colour";pushLog(st,who+" free ball ("+nominated+") as red +1");return}if(st.clearance){const v=val[st.ballOn];sAdd(st,v);pushLog(st,who+" free ball ("+nominated+") as "+st.ballOn+" +"+v+" · "+st.ballOn+" still on");return}const v=freeBallOnValue;sAdd(st,v);pushLog(st,who+" free ball ("+nominated+") as colour +"+v);if(st.reds>0)st.ballOn="red";else{st.clearance=true;st.ballOn="yellow"}})}
+function sConcede(){sApply(st=>{pushLog(st,sSettings.names[st.active]+" conceded");sWin(st,1-st.active,"concede")})}function sSelect(i){if(i===sState.active||sState.winner!==null)return;sApply(st=>{st.active=i;st.break=0;pushLog(st,"Striker → "+sSettings.names[i])})}
+function sBuildResult(){if(sState.winner===null)return null;const players=[sSettings.names[0],sSettings.names[1]];return{id:sState.gameId,mode:"snooker",startedAt:sState.startedAt,endedAt:sState.endedAt||now(),players,scores:[...sState.scores],winner:sState.winner,losers:[players[1-sState.winner]],best:[...sState.best],reason:sState.reason||"final black",startingReds:sState.startingReds,actions:sState.log.length}}function syncSResult(){const r=sBuildResult();if(r)upsertResult(r);else removeResult(sState.gameId)}function sHasProgress(){return sState.log.length>0||sState.scores.some(x=>x!==0)||sState.reds!==sState.startingReds}function sReset(){sState=newSnooker(sSettings);sTL={past:[],future:[]};saveSnooker();syncSResult();render()}
+let mode=readAny(K.mode,LEGACY.mode,"century");if(mode!=="century"&&mode!=="snooker")mode="century";write(K.mode,mode);let openPanel=null,historyTab="log",resultFilter="all",statsFilter="all",expandedResult=null,subPanel=null;
+function setMode(m){mode=m;write(K.mode,m);openPanel=null;subPanel=null;render()}function openHistory(tab="log"){historyTab=tab;openPanel="history";renderSheet()}function openSettings(){openPanel="settings";renderSheet()}function closeSheet(){openPanel=null;document.getElementById("sheetBackdrop").classList.remove("show")}
+function askConfirm(message,onYes){openPanel="confirm";const back=document.getElementById("sheetBackdrop"),sheet=document.getElementById("sheet");back.classList.add("show");sheet.innerHTML=`<div class="sheetHead"><div class="sheetTitle">Confirm</div><button class="close" id="x">×</button></div><div class="confirmBar"><p>${esc(message)}</p><div class="row"><button class="secondary" id="no">Cancel</button><button class="danger" id="yes">Confirm</button></div></div>`;sheet.querySelector("#x").onclick=closeSheet;sheet.querySelector("#no").onclick=closeSheet;sheet.querySelector("#yes").onclick=()=>{closeSheet();onYes()}}
+function renderSheet(){const back=document.getElementById("sheetBackdrop"),sheet=document.getElementById("sheet");back.classList.add("show");if(openPanel==="history")renderHistorySheet(sheet);else if(openPanel==="settings")renderSettingsSheet(sheet)}
+function resultHTML(r){const open=expandedResult===r.id;return `<div class="resultCard ${open?"open":""}" data-rid="${esc(r.id)}"><div class="resultTop"><div class="resultMode">${esc(r.mode)}</div><div class="resultDate">${fmtDate(r.endedAt)}</div></div><div class="resultWinner">${esc(r.players[r.winner])} won</div><div class="resultScores">${r.players.map((n,i)=>esc(n)+" "+Number(r.scores[i]||0)).join(" · ")}</div><div class="resultDetails">${r.players.map((n,i)=>`<div class="finalRow"><span>${esc(n)}</span><b>${Number(r.scores[i]||0)} · high ${Number((r.best||[])[i]||0)}</b></div>`).join("")}<div class="finalRow"><span>${r.mode==="century"?"Target":"Starting reds"}</span><b>${r.mode==="century"?r.target:r.startingReds}</b></div><div class="finalRow"><span>Finished</span><b>${esc(r.reason||"—")}</b></div><div class="finalRow"><span>Duration</span><b>${fmtDuration((r.endedAt||0)-(r.startedAt||0))}</b></div><div class="finalRow"><span>Actions</span><b>${Number(r.actions||0)}</b></div></div></div>`}
+function statHTML(p,f){const pct=p.played?Math.round(p.wins/p.played*100):0,avgC=p.cGames?(p.cPoints/p.cGames).toFixed(1):"—",avgS=p.sFrames?(p.sPoints/p.sFrames).toFixed(1):"—";return `<div class="statCard"><div class="statName">${esc(p.name)}</div><div class="statGrid"><div class="statBox"><strong>${p.played}</strong><span>Played</span></div><div class="statBox"><strong>${p.wins}</strong><span>Wins</span></div><div class="statBox"><strong>${p.losses}</strong><span>Losses</span></div><div class="statBox"><strong>${pct}%</strong><span>Win %</span></div></div><div class="kicker">Total points ${p.points}</div>${(f==="all"||f==="century")&&p.cGames?`<div class="kicker">Century: ${p.cGames} games · ${p.cWins} wins · high visit ${p.cBest} · avg ${avgC}</div>`:""}${(f==="all"||f==="snooker")&&p.sFrames?`<div class="kicker">Snooker: ${p.sFrames} frames · ${p.sWins} wins · high break ${p.sBest} · avg ${avgS}</div>`:""}</div>`}
+function renderHistorySheet(sheet){const current=mode==="century"?cState:sState,centuryCount=results.filter(r=>r.mode==="century").length,snookerCount=results.filter(r=>r.mode==="snooker").length;sheet.innerHTML=`<div class="sheetHead"><div class="sheetTitle">History</div><button class="close" id="x">×</button></div><div class="tabs"><button class="tab ${historyTab==="log"?"active":""}" data-tab="log">Current Log</button><button class="tab ${historyTab==="results"?"active":""}" data-tab="results">Results</button><button class="tab ${historyTab==="stats"?"active":""}" data-tab="stats">Stats</button></div><div id="histBody"></div>`;sheet.querySelector("#x").onclick=closeSheet;sheet.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{historyTab=b.dataset.tab;renderHistorySheet(sheet)});const body=sheet.querySelector("#histBody");if(historyTab==="log"){body.innerHTML=current.log.length?`<div class="sectionTitle">${mode==="century"?"Current game":"Current frame"} · ${current.log.length} actions</div>`+current.log.map(h=>`<div class="resultCard"><div class="resultTop"><div>${esc(h.text)}</div><div class="resultDate">${fmtTime(h.t)}</div></div></div>`).join(""):`<div class="empty">No actions yet.</div>`}else if(historyTab==="results"){const list=results.filter(r=>resultFilter==="all"||r.mode===resultFilter).sort((a,b)=>b.endedAt-a.endedAt);body.innerHTML=`<div class="summary"><div><strong>${centuryCount}</strong><span>Century games</span></div><div><strong>${snookerCount}</strong><span>Snooker frames</span></div></div><div class="filters">${["all","century","snooker"].map(f=>`<button class="filter ${resultFilter===f?"active":""}" data-rf="${f}">${f[0].toUpperCase()+f.slice(1)}</button>`).join("")}</div><div id="resultList">${list.length?list.map(resultHTML).join(""):`<div class="empty">No completed games yet.</div>`}</div>${results.length?`<div class="sectionTitle">Data</div><button class="danger" id="clearResults">Clear results</button>`:""}`;body.querySelectorAll("[data-rf]").forEach(b=>b.onclick=()=>{resultFilter=b.dataset.rf;renderHistorySheet(sheet)});body.querySelectorAll("[data-rid]").forEach(b=>b.onclick=()=>{expandedResult=expandedResult===b.dataset.rid?null:b.dataset.rid;renderHistorySheet(sheet)});const cr=body.querySelector("#clearResults");if(cr)cr.onclick=()=>askConfirm("Clear all completed game and frame history? This cannot be undone.",()=>{clearResults();openPanel="history";historyTab="results";renderSheet()})}else{const st=computeStats(statsFilter);body.innerHTML=`<div class="filters">${["all","century","snooker"].map(f=>`<button class="filter ${statsFilter===f?"active":""}" data-sf="${f}">${f[0].toUpperCase()+f.slice(1)}</button>`).join("")}</div>`+(st.length?st.map(p=>statHTML(p,statsFilter)).join(""):`<div class="empty">Play and finish some games to build player stats.</div>`);body.querySelectorAll("[data-sf]").forEach(b=>b.onclick=()=>{statsFilter=b.dataset.sf;renderHistorySheet(sheet)})}}
+function renderSettingsSheet(sheet){if(mode==="century"){sheet.innerHTML=`<div class="sheetHead"><div class="sheetTitle">Century Settings</div><button class="close" id="x">×</button></div><div class="sectionTitle">Players</div><div class="inlineOptions">${[2,3,4].map(n=>`<button class="option ${cSettings.playerCount===n?"active":""}" data-pc="${n}">${n}</button>`).join("")}</div>${cSettings.names.map((n,i)=>`<div class="field"><label>Player ${i+1}${i>=cSettings.playerCount?" (saved)":""}</label><input data-cn="${i}" value="${esc(n)}" ${i>=cSettings.playerCount?"disabled":""}></div>`).join("")}<div class="sectionTitle">Target</div><div class="inlineOptions">${[100,200,300].map(n=>`<button class="option ${cSettings.target===n?"active":""}" data-target="${n}">${n}</button>`).join("")}</div><div class="field"><label>Custom target</label><input id="ctarget" type="number" min="20" max="1000" value="${cSettings.target}"></div><div class="sectionTitle">Protection</div><div class="inlineOptions">${[["shooter","Shooter <50%"],["leader","Leader <50%"],["manual","Manual"]].map(([v,l])=>`<button class="option ${cSettings.protectMode===v?"active":""}" data-protect="${v}">${l}</button>`).join("")}</div>${cSettings.protectMode==="manual"?`<div class="field"><label>Manual protection</label><select id="manualProtect"><option value="on" ${cSettings.manualProtect?"selected":""}>On</option><option value="off" ${!cSettings.manualProtect?"selected":""}>Off</option></select></div>`:""}<div class="field"><label>Exact target</label><select id="exact"><option value="off" ${!cSettings.exactTarget?"selected":""}>Off</option><option value="on" ${cSettings.exactTarget?"selected":""}>On</option></select></div><div class="sectionTitle">Game</div><button class="secondary" id="newGame">New game</button>`;sheet.querySelector("#x").onclick=closeSheet;sheet.querySelectorAll("[data-pc]").forEach(b=>b.onclick=()=>{changePlayerCount(Number(b.dataset.pc));renderSettingsSheet(sheet)});sheet.querySelectorAll("[data-cn]").forEach(inp=>inp.onchange=()=>{cSettings.names[Number(inp.dataset.cn)]=inp.value.trim()||("Player "+(Number(inp.dataset.cn)+1));saveCentury();render()});sheet.querySelectorAll("[data-target]").forEach(b=>b.onclick=()=>{cSettings.target=Number(b.dataset.target);saveCentury();renderSettingsSheet(sheet);render()});sheet.querySelector("#ctarget").onchange=e=>{cSettings.target=clamp(e.target.value,20,1000);saveCentury();render()};sheet.querySelectorAll("[data-protect]").forEach(b=>b.onclick=()=>{cSettings.protectMode=b.dataset.protect;saveCentury();renderSettingsSheet(sheet);render()});const mp=sheet.querySelector("#manualProtect");if(mp)mp.onchange=e=>{cSettings.manualProtect=e.target.value==="on";saveCentury();render()};sheet.querySelector("#exact").onchange=e=>{cSettings.exactTarget=e.target.value==="on";saveCentury();render()};sheet.querySelector("#newGame").onclick=()=>{closeSheet();if(cHasProgress()&&cState.winner===null)askConfirm("Start a new Century game and discard the current unfinished game?",cReset);else cReset()}}else{sheet.innerHTML=`<div class="sheetHead"><div class="sheetTitle">Snooker Settings</div><button class="close" id="x">×</button></div>${sSettings.names.map((n,i)=>`<div class="field"><label>Player ${i+1}</label><input data-sn="${i}" value="${esc(n)}"></div>`).join("")}<div class="sectionTitle">Starting reds</div><div class="field"><label>1–15 · applies next frame</label><input id="startingReds" type="number" min="1" max="15" value="${sSettings.startingReds}"></div><div class="sectionTitle">Frame</div><button class="secondary" id="newFrame">New frame</button>`;sheet.querySelector("#x").onclick=closeSheet;sheet.querySelectorAll("[data-sn]").forEach(inp=>inp.onchange=()=>{sSettings.names[Number(inp.dataset.sn)]=inp.value.trim()||("Player "+(Number(inp.dataset.sn)+1));saveSnooker();render()});sheet.querySelector("#startingReds").onchange=e=>{sSettings.startingReds=clamp(Math.floor(e.target.value),1,15);saveSnooker()};sheet.querySelector("#newFrame").onclick=()=>{closeSheet();if(sHasProgress()&&sState.winner===null)askConfirm("Start a new snooker frame and discard the current unfinished frame?",sReset);else sReset()}}}
+function appHeader(){return `<div class="top"><div class="brandWrap"><div class="logoOrb">●</div><div><div class="brand">${mode==="century"?"CENTURY":"SNOOKER"} <span class="brandBadge">${mode==="century"?"Afghan Century":"Standard"}</span></div><div class="subtitle">Century & Standard Snooker Scorekeeper</div></div></div><div class="mode"><button data-mode="century" class="${mode==="century"?"active":""}">⚡ Century</button><button data-mode="snooker" class="${mode==="snooker"?"active":""}">● Snooker</button></div></div>`}function toolBar(canUndo,canRedo,chips){return `<div class="toolbar"><div class="chips">${chips}</div><div class="actions"><button class="iconBtn" id="logBtn" aria-label="Log and history" title="Log & history">☰</button><button class="iconBtn" id="undoBtn" aria-label="Undo" title="Undo" ${canUndo?"":"disabled"}>↶</button><button class="iconBtn" id="redoBtn" aria-label="Redo" title="Redo" ${canRedo?"":"disabled"}>↷</button><button class="iconBtn" id="settingsBtn" aria-label="Settings" title="Settings">⚙</button></div></div>`}function recentHTML(log,limit,newLabel){const arr=(log||[]).slice(0,limit);return `<div class="recent"><div class="recentHead"><span class="label">● Live activity</span><div><button class="smallBtn" id="viewAll">View all</button> <button class="smallBtn" id="newBtn">${newLabel}</button></div></div>${arr.length?arr.map(h=>`<div class="logline">${esc(h.text)}</div>`).join(""):`<div class="logline">No actions yet.</div>`}</div>`}
+function centuryHTML(){const pc=cState.players.length,act=cState.players[cState.active],players=cState.players.map((p,i)=>{const left=Math.max(0,cSettings.target-p.score),pct=Math.max(0,Math.min(100,p.score/cSettings.target*100));return `<button class="player ${i===cState.active?"active":""}" data-cplayer="${i}"><div class="name">${esc(cSettings.names[i])}</div><div class="score">${p.score}</div><div class="meta">${left} left · high ${p.best}</div><div class="progress"><i style="width:${pct}%"></i></div>${p.freeReds>0?`<div class="badge">FREE RED ×${p.freeReds}</div>`:""}</button>`}).join(""),chips=`<span class="chip">🎯 Target ${cSettings.target}</span>${cProtected()?`<span class="chip good">🛡 Protected</span>`:`<span class="chip">−10 Red Miss</span>`}`;let body=appHeader()+toolBar(cTL.past.length>0,cTL.future.length>0,chips)+`<div class="players p${pc}">${players}</div>`;if(cState.winner!==null){body+=`<div class="winner"><div class="eyebrow">Winner</div><h2>${esc(cSettings.names[cState.winner])}</h2>${cState.players.map((p,i)=>`<div class="finalRow"><span>${esc(cSettings.names[i])}</span><b>${p.score} · high ${p.best}</b></div>`).join("")}<div class="two" style="margin-top:9px"><button class="primary" id="winnerNew">New game</button><button class="secondary" id="viewResult">View result</button></div></div>`}else{body+=`<div class="status"><span>Shooting <b>${esc(cSettings.names[cState.active])}</b></span><span>Visit <b>${cState.visit}</b></span></div>`;if(act.freeReds>0)body+=`<div class="passPanel"><div class="passTitle">${act.freeReds} free-red ${act.freeReds===1?"pass":"passes"}</div><div class="two"><button class="red ball" id="freePot"><strong>10</strong><span>Pot red · keep pass</span></button><button class="secondary" id="freeMiss">Miss · spend 1</button></div></div>`;body+=`<div class="ballGrid">${[["Red",10,"red"],["Yellow",2,"yellow"],["Green",3,"green"],["Brown",4,"brown"],["Blue",5,"blue"],["Pink",6,"pink"],["Black",7,"black"]].map(([n,v,c])=>`<button class="ball ${c}" data-cpot="${v}" data-name="${n}" ${cCanScore(v)?"":"disabled"}><strong>${v}</strong><span>${n}</span></button>`).join("")}<button class="danger" id="missRed"><b>Miss red</b><br><small>${cProtected()?"free passes":"−10 · end"}</small></button></div><div class="controls century"><button class="secondary" id="missNext">Miss / next</button><button class="danger" id="foulToggle">Foul</button></div>${subPanel==="cfoul"?`<div class="panel"><div class="panelLabel">Foul penalty</div><div class="four">${[4,5,6,7].map(v=>`<button class="danger" data-cfoul="${v}">−${v}</button>`).join("")}</div></div>`:""}`}body+=recentHTML(cState.log,4,"New game");return body}
+function sBallButton(name,value,cls,key){return `<button class="ball ${cls}" data-spot="${key}" ${sCanPot(key)?"":"disabled"}><strong>${value}</strong><span>${name}</span></button>`}function freePanelHTML(){const generic=sState.ballOn==="colour"&&!sState.clearance;return `<div class="panel"><div class="panelLabel">Free ball${generic?" · choose actual ball-on value":""}</div>${generic?`<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-bottom:7px">${[2,3,4,5,6,7].map(v=>`<button class="option ${freeBallOnValue===v?"active":""}" data-onv="${v}">${v}</button>`).join("")}</div>`:""}<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:5px">${colors.map(([k,n])=>`<button class="ball ${k}" style="height:46px" data-free="${k}" ${generic&&!freeBallOnValue?"disabled":""}><strong style="font-size:14px">${n.slice(0,3)}</strong></button>`).join("")}</div></div>`}
+function snookerHTML(){const chips=`<span class="chip">🔴 ${sState.reds} Reds</span><span class="chip good">${sState.respotted?"⚫ RESPOTTED BLACK":sState.ballOn==="colour"?"● COLOUR ON":"● "+String(sState.ballOn).toUpperCase()+" ON"}</span>`;let body=appHeader()+toolBar(sTL.past.length>0,sTL.future.length>0,chips)+`<div class="players p2">${sState.scores.map((sc,i)=>`<button class="player ${i===sState.active?"active":""}" data-splayer="${i}"><div class="name">${esc(sSettings.names[i])}</div><div class="score">${sc}</div><div class="meta">${i===sState.active?"Break "+sState.break:"High "+sState.best[i]}</div></button>`).join("")}</div>`;if(sState.winner!==null){body+=`<div class="winner"><div class="eyebrow">Frame winner</div><h2>${esc(sSettings.names[sState.winner])}</h2><div class="finalRow"><span>${esc(sSettings.names[0])}</span><b>${sState.scores[0]} · high ${sState.best[0]}</b></div><div class="finalRow"><span>${esc(sSettings.names[1])}</span><b>${sState.scores[1]} · high ${sState.best[1]}</b></div><div class="kicker">${esc(sState.reason||"")}</div><div class="two" style="margin-top:9px"><button class="primary" id="winnerNew">New frame</button><button class="secondary" id="viewResult">View result</button></div></div>`}else{const rem=sState.respotted?7:(sState.clearance?clearance.slice(Math.max(0,clearance.indexOf(sState.ballOn))).reduce((a,c)=>a+val[c],0):sState.reds*8+27+(sState.ballOn==="colour"?7:0));body+=`<div class="status"><span>Striker <b>${esc(sSettings.names[sState.active])}</b></span><span>Break <b>${sState.break}</b></span><span>Remaining <b>${rem}</b></span></div><div class="ballGrid">${sBallButton("Red",1,"red","red")}${colors.map(([k,n,v])=>sBallButton(n,v,k,k)).join("")}</div><div class="controls"><button class="secondary" id="sMiss">Miss / end</button><button class="danger" id="sFoulToggle">Foul</button><button class="secondary" id="freeToggle" ${sState.respotted?"disabled":""}>Free ball</button></div>${subPanel==="sfoul"?`<div class="panel"><div class="panelLabel">Points to ${esc(sSettings.names[1-sState.active])}</div><div class="four">${[4,5,6,7].map(v=>`<button class="danger" data-sfoul="${v}">+${v}</button>`).join("")}</div></div>`:""}${subPanel==="free"?freePanelHTML():""}<div style="margin-top:8px;text-align:right"><button class="smallBtn" id="concede">Concede frame</button></div>`}body+=recentHTML(sState.log,5,"New frame");return body}
+function render(){document.title=(mode==="century"?"Century":"Snooker")+" Scorekeeper";document.getElementById("app").innerHTML=mode==="century"?centuryHTML():snookerHTML();bindMain();if(openPanel==="history"||openPanel==="settings")renderSheet()}
+function bindMain(){document.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>setMode(b.dataset.mode));document.getElementById("logBtn").onclick=()=>openHistory("log");document.getElementById("settingsBtn").onclick=openSettings;document.getElementById("viewAll").onclick=()=>openHistory("log");if(mode==="century"){document.getElementById("undoBtn").onclick=cUndo;document.getElementById("redoBtn").onclick=cRedo;document.querySelectorAll("[data-cplayer]").forEach(b=>b.onclick=()=>cSelect(Number(b.dataset.cplayer)));document.querySelectorAll("[data-cpot]").forEach(b=>b.onclick=()=>cPot(b.dataset.name,Number(b.dataset.cpot)));const fp=document.getElementById("freePot");if(fp)fp.onclick=()=>cPot("Red",10,true);const fm=document.getElementById("freeMiss");if(fm)fm.onclick=cFreeMiss;const mr=document.getElementById("missRed");if(mr)mr.onclick=cMissRed;const mn=document.getElementById("missNext");if(mn)mn.onclick=cMissNext;const ft=document.getElementById("foulToggle");if(ft)ft.onclick=()=>{subPanel=subPanel==="cfoul"?null:"cfoul";render()};document.querySelectorAll("[data-cfoul]").forEach(b=>b.onclick=()=>{subPanel=null;cFoul(Number(b.dataset.cfoul))});const nb=document.getElementById("newBtn");if(nb)nb.onclick=()=>cState.winner!==null?cReset():(cHasProgress()?askConfirm("Start a new Century game and discard the current unfinished game?",cReset):cReset());const wn=document.getElementById("winnerNew");if(wn)wn.onclick=cReset;const vr=document.getElementById("viewResult");if(vr)vr.onclick=()=>openHistory("results")}else{document.getElementById("undoBtn").onclick=sUndo;document.getElementById("redoBtn").onclick=sRedo;document.querySelectorAll("[data-splayer]").forEach(b=>b.onclick=()=>sSelect(Number(b.dataset.splayer)));document.querySelectorAll("[data-spot]").forEach(b=>b.onclick=()=>sPot(b.dataset.spot));const sm=document.getElementById("sMiss");if(sm)sm.onclick=sMiss;const sf=document.getElementById("sFoulToggle");if(sf)sf.onclick=()=>{subPanel=subPanel==="sfoul"?null:"sfoul";render()};document.querySelectorAll("[data-sfoul]").forEach(b=>b.onclick=()=>{subPanel=null;sFoul(Number(b.dataset.sfoul))});const fr=document.getElementById("freeToggle");if(fr)fr.onclick=()=>{subPanel=subPanel==="free"?null:"free";freeBallOnValue=null;render()};document.querySelectorAll("[data-onv]").forEach(b=>b.onclick=()=>{freeBallOnValue=Number(b.dataset.onv);render()});document.querySelectorAll("[data-free]").forEach(b=>b.onclick=()=>{subPanel=null;sFreeBall(b.dataset.free)});const cc=document.getElementById("concede");if(cc)cc.onclick=()=>askConfirm("Concede this frame?",sConcede);const nb=document.getElementById("newBtn");if(nb)nb.onclick=()=>sState.winner!==null?sReset():(sHasProgress()?askConfirm("Start a new snooker frame and discard the current unfinished frame?",sReset):sReset());const wn=document.getElementById("winnerNew");if(wn)wn.onclick=sReset;const vr=document.getElementById("viewResult");if(vr)vr.onclick=()=>openHistory("results")}}
+document.getElementById("sheetBackdrop").addEventListener("click",e=>{if(e.target.id==="sheetBackdrop")closeSheet()});syncCResult();syncSResult();saveCentury();saveSnooker();render();
+})();
+</script>
+</body>
+</html>
