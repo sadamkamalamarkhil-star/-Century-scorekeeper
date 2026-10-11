@@ -399,6 +399,7 @@ button:active{transform:scale(.975)}
 }
 
 .safetyBar{display:flex;align-items:center;gap:7px;justify-content:flex-end;margin:-4px 0 10px}.safetyBar button{border:1px solid #345348;border-radius:11px;background:#101f19;color:#d1fae5;padding:8px 12px;font-size:10px;font-weight:900;letter-spacing:.03em}.safetyBar button.locked{border-color:#f59e0b;background:#4b3310;color:#fcd34d}.ball:disabled{opacity:.5}
+.clubPresetGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:8px}.ratePreset{display:flex;flex-direction:column;gap:5px;padding:9px;border:1px solid #24503f;border-radius:12px;background:#0b2019}.ratePreset span{font-size:10px;font-weight:800;color:#d1fae5}.ratePreset input{width:100%;min-width:0;border:1px solid #395448;border-radius:8px;background:#182d24;color:white;font-size:16px;padding:8px}
 </style>
 </head>
 <body>
@@ -631,19 +632,27 @@ function endClubSession(){
 }
 function openTimer(){openPanel="timer";renderSheet()}
 function timerReceiptHTML(r){return `<div class="timerReceipt"><h4>${esc(r.club||"Snooker club")}${r.sectionId?" · "+esc(timerSectionLabel(r.sectionId)):""} · ${esc(new Date(r.endedAt).toLocaleDateString())}</h4><div class="line"><span>Played</span><span>${formatTimer(r.totalMs)}</span></div><div class="line"><span>Billable time</span><span>${billableLabel(r.billableMs)}</span></div><div class="line"><span>${esc(billingLabel(r.billing))} · ${formatMoney(r.hourlyRate)}/${esc(r.currency)}/hour</span><strong>${esc(r.currency)} ${formatMoney(r.charge)}</strong></div></div>`}
+function setSavedRate(key,rate){if(!(key in defaultClubPresets))return false;const n=Number(rate);if(!Number.isFinite(n)||n<0)return false;timerState.presets[key]=Math.min(100000000,Math.round(n*100)/100);if(!timerState.active&&timerState.settings.clubId+":"+timerState.settings.sectionId===key)timerState.settings.hourlyRate=timerState.presets[key];saveClubTimer();timerRedraw();return true}
 function renderTimerSheet(sheet){
-  const a=timerState.active,s=timerState.settings,elapsed=timerElapsedMs(),bill=timerEstimate(elapsed);
+  const a=timerState.active,s=timerSessionSettings(),elapsed=timerElapsedMs(),bill=timerEstimate(elapsed);
   sheet.innerHTML=`<div class="sheetHead"><div class="sheetTitle">⏱ Club Session Timer</div><button class="close" id="x" aria-label="Close timer">×</button></div>
   <div class="timerHero"><div class="timerHeroTitle">${!a?"READY TO START":a.status==="running"?"● SESSION RUNNING":"Ⅱ SESSION PAUSED"}</div><div class="timerHeroClock" ${a?'data-clock="elapsed"':''}>${formatTimer(elapsed)}</div><div class="timerHeroBill" ${a?'data-clock="estimate"':''}>${esc(s.currency)} ${formatMoney(bill.charge)}</div><div class="timerHeroMeta">Billable: <span ${a?'data-clock="billable"':''}>${billableLabel(bill.billableMs)}</span> · ${billingLabel(s.billing)}</div></div>
-  <div class="sectionTitle">Club pricing</div><div class="field"><label>Club name</label><input id="timerClub" value="${esc(s.club)}" maxlength="60" placeholder="Club name"></div>
-  <div class="two"><div class="field"><label>Price per hour</label><input id="timerRate" type="number" min="0" max="100000000" step="0.01" inputmode="decimal" value="${s.hourlyRate||""}" placeholder="Enter price"></div><div class="field"><label>Currency</label><input id="timerCurrency" maxlength="12" value="${esc(s.currency)}" placeholder="AFN"></div></div>
-  <div class="field"><label>How the club bills time</label><select id="timerBilling"><option value="exact" ${s.billing==="exact"?"selected":""}>Exact elapsed time</option><option value="half" ${s.billing==="half"?"selected":""}>Round up to 30-minute blocks</option><option value="hour" ${s.billing==="hour"?"selected":""}>Round up to full hours</option></select></div>
-  <div class="timerSmall">Pricing changes update the current estimate. Start when the club begins charging; changing games never resets this timer. The clock keeps accurate time when your phone locks.</div>
+  <div class="sectionTitle">Club pricing</div>
+  <div class="two"><div class="field"><label>Club</label><select id="timerClubSelect" ${a?"disabled":""}>${[["qball","Qball"],["vip-club","VIP club"],["custom","Custom"]].map(([id,label])=>`<option value="${id}" ${s.clubId===id?"selected":""}>${label}</option>`).join("")}</select></div><div class="field"><label>Section</label><select id="timerSectionSelect" ${a?"disabled":""}><option value="normal" ${s.sectionId!=="vip"?"selected":""}>Normal</option><option value="vip" ${s.sectionId==="vip"?"selected":""}>VIP section</option></select></div></div>
+  ${s.clubId==="custom"?`<div class="field"><label>Custom club name</label><input id="timerClub" value="${esc(s.club)}" maxlength="60" placeholder="Club name" ${a?"disabled":""}></div>`:""}
+  <div class="smallNote">${s.clubId==="vip-club"?"VIP club — "+timerSectionLabel(s.sectionId):esc(s.club)+" — "+timerSectionLabel(s.sectionId)} · AFN/hour. Rates are saved separately for each club and section.</div>
+  <div class="two"><div class="field"><label>Price per hour</label><input id="timerRate" type="number" min="0" max="100000000" step="0.01" inputmode="decimal" value="${s.hourlyRate||""}" placeholder="Enter price" ${a?"disabled":""}></div><div class="field"><label>Currency</label><input id="timerCurrency" maxlength="12" value="${esc(s.currency)}" placeholder="AFN" ${a?"disabled":""}></div></div>
+  <div class="field"><label>How the club bills time</label><select id="timerBilling" ${a?"disabled":""}><option value="exact" ${s.billing==="exact"?"selected":""}>Exact elapsed time</option><option value="half" ${s.billing==="half"?"selected":""}>Round up to 30-minute blocks</option><option value="hour" ${s.billing==="hour"?"selected":""}>Round up to full hours</option></select></div>
+  <div class="timerSmall">The selected price and billing method are frozen when you start. Changes to saved rates affect future sessions, not an active session or old receipts. The clock keeps accurate time with the phone locked.</div>
+  <div class="sectionTitle">Saved club rates · AFN per hour</div><div class="clubPresetGrid">${Object.entries(defaultClubPresets).map(([key])=>{const parts=key.split(":");return `<label class="ratePreset"><span>${esc(timerClubLabel(parts[0]))} · ${timerSectionLabel(parts[1])}</span><input data-preset-rate="${key}" type="number" min="0" max="100000000" step="1" value="${timerState.presets[key]}" inputmode="numeric"></label>`}).join("")}</div>
   <div class="timerControls">${!a?`<button id="timerStart" class="timerStart full" ${s.hourlyRate>0?"":"disabled"}>▶ START CLUB SESSION</button>`:`<button id="timerPause" class="secondary">${a.status==="running"?"Ⅱ PAUSE":"▶ RESUME"}</button><button id="timerEnd" class="danger">■ END SESSION</button>`}</div>
   ${!a&&!(s.hourlyRate>0)?`<div class="smallNote">Enter an hourly rate to start. The app does not assume a club price.</div>`:""}
   ${timerState.history.length?`<div class="sectionTitle">Previous sessions</div>${timerState.history.slice(0,5).map(timerReceiptHTML).join("")}`:""}`;
   sheet.querySelector("#x").onclick=closeSheet;
-  sheet.querySelector("#timerClub").onchange=e=>setClubName(e.target.value);
+  const customClub=sheet.querySelector("#timerClub");if(customClub)customClub.onchange=e=>setClubName(e.target.value);
+  sheet.querySelector("#timerClubSelect").onchange=e=>selectClubPreset(e.target.value,s.sectionId);
+  sheet.querySelector("#timerSectionSelect").onchange=e=>selectClubPreset(s.clubId,e.target.value);
+  sheet.querySelectorAll("[data-preset-rate]").forEach(input=>input.onchange=e=>{if(!setSavedRate(input.dataset.presetRate,e.target.value))showToast("Enter a valid hourly rate")});
   sheet.querySelector("#timerRate").onchange=e=>setClubRate(e.target.value);
   sheet.querySelector("#timerCurrency").onchange=e=>setClubCurrency(e.target.value);
   sheet.querySelector("#timerBilling").onchange=e=>setClubBilling(e.target.value);
