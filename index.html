@@ -543,22 +543,38 @@ function sConcede(){sApply(st=>{pushLog(st,sDisplayName(st.active,st)+" conceded
 function sBuildResult(){if(sState.winner===null)return null;const refs=(sState.matchRefs||currentSRefs()),players=refs.map(r=>r.name);return{id:sState.gameId,mode:"snooker",startedAt:sState.startedAt,endedAt:sState.endedAt||now(),players,playerRefs:refs,scores:[...sState.scores],winner:sState.winner,losers:[players[1-sState.winner]],best:[...sState.best],reason:sState.reason||"final black",startingReds:sState.startingReds,actions:sState.log.length}}function syncSResult(){const r=sBuildResult();if(r)upsertResult(r);else removeResult(sState.gameId)}function sHasProgress(){return sState.log.length>0||sState.scores.some(x=>x!==0)||sState.reds!==sState.startingReds}function sReset(){if(scoreLocked){showToast("Unlock scoring first");return}sState=newSnooker(sSettings);sTL={past:[],future:[]};saveSnooker();syncSResult();render()}
 
 /* Club session clock is intentionally independent of both game engines. */
-const clubTimerDefaults={club:"Snooker club",currency:"AFN",hourlyRate:0,billing:"exact"};
+const clubTimerDefaults={club:"Snooker club",clubId:"custom",sectionId:"normal",currency:"AFN",hourlyRate:0,billing:"exact"};
+const defaultClubPresets={"qball:normal":200,"qball:vip":300,"vip-club:normal":150,"vip-club:vip":250};
+function timerClubLabel(id){return id==="qball"?"Qball":id==="vip-club"?"VIP club":"Custom club"}
+function timerSectionLabel(id){return id==="vip"?"VIP section":"Normal section"}
+function clubPresetRate(club,section){const key=club+":"+section;return Number(timerState.presets[key]||0)}
+function timerSessionSettings(){return timerState.active?.pricing||timerState.settings}
+function selectClubPreset(club,section){if(timerState.active)return false;
+  const c=["qball","vip-club","custom"].includes(club)?club:"custom",s=section==="vip"?"vip":"normal";
+  timerState.settings.clubId=c;timerState.settings.sectionId=s;
+  if(c!=="custom"){timerState.settings.club=timerClubLabel(c);timerState.settings.currency="AFN";timerState.settings.hourlyRate=clubPresetRate(c,s)}
+  saveClubTimer();timerRedraw();return true;
+}
 function cleanClubTimer(raw){
   const settings={...clubTimerDefaults,...(raw&&raw.settings||{})};
   settings.club=String(settings.club||"Snooker club").trim().slice(0,60)||"Snooker club";
   settings.currency=String(settings.currency||"AFN").replace(/[^\w .-]/g,"").trim().slice(0,12)||"AFN";
   settings.hourlyRate=Number.isFinite(Number(settings.hourlyRate))?Math.min(100000000,Math.max(0,Number(settings.hourlyRate))):0;
   if(!["exact","half","hour"].includes(settings.billing))settings.billing="exact";
+  const presets={...defaultClubPresets};
+  for(const key of Object.keys(presets)){const v=Number(raw?.presets?.[key]);if(raw?.presets&&Number.isFinite(v)&&v>=0)presets[key]=Math.min(100000000,v)}
+  if(!raw?.settings){settings.clubId="qball";settings.sectionId="normal";settings.club="Qball";settings.currency="AFN";settings.hourlyRate=presets["qball:normal"]}
+  if(!["qball","vip-club","custom"].includes(settings.clubId))settings.clubId="custom";
+  settings.sectionId=settings.sectionId==="vip"?"vip":"normal";
   const candidate=raw&&raw.active;
   const active=candidate&&["running","paused"].includes(candidate.status)&&Number.isFinite(candidate.startedAt)?{
     id:String(candidate.id||uid()),status:candidate.status,startedAt:candidate.startedAt,
     segmentStart:Number.isFinite(candidate.segmentStart)?candidate.segmentStart:null,
-    elapsedMs:Math.max(0,Number(candidate.elapsedMs)||0)
+    elapsedMs:Math.max(0,Number(candidate.elapsedMs)||0),pricing:{...settings,...(candidate.pricing&&typeof candidate.pricing==="object"?candidate.pricing:{})}
   }:null;
   if(active&&active.status==="running"&&!Number.isFinite(active.segmentStart))active.segmentStart=active.startedAt;
   const history=Array.isArray(raw&&raw.history)?raw.history.filter(x=>x&&typeof x==="object").slice(0,30):[];
-  return{settings,active,history};
+  return{settings,active,history,presets};
 }
 let timerState=cleanClubTimer(read(K.clubTimer,null));
 function saveClubTimer(){write(K.clubTimer,timerState)}
@@ -567,7 +583,7 @@ function timerElapsedMs(at=now()){
   return Math.max(0,a.elapsedMs+(a.status==="running"?Math.max(0,at-a.segmentStart):0));
 }
 function timerEstimate(totalMs=timerElapsedMs()){
-  const rate=timerState.settings.hourlyRate,rounding=timerState.settings.billing;
+  const pricing=timerSessionSettings(),rate=pricing.hourlyRate,rounding=pricing.billing;
   const billableMs=totalMs<=0?0:rounding==="half"?Math.ceil(totalMs/1800000)*1800000:rounding==="hour"?Math.ceil(totalMs/3600000)*3600000:totalMs;
   return{billableMs,charge:Math.round((billableMs/3600000*rate+Number.EPSILON)*100)/100};
 }
@@ -576,25 +592,25 @@ function formatMoney(n){return Number(n||0).toLocaleString(undefined,{minimumFra
 function billingLabel(kind){return kind==="half"?"30-minute blocks":kind==="hour"?"Full hours":"Exact time"}
 function billableLabel(ms){const min=Math.ceil(ms/60000);return min>=60?Math.floor(min/60)+"h "+(min%60)+"m":min+"m"}
 function timerRibbonHTML(){
-  const a=timerState.active,live=!!a,price=timerEstimate(),status=!a?"Tap to start a club session":a.status==="running"?"RUNNING · "+timerState.settings.club:"PAUSED · "+timerState.settings.club;
-  return `<button id="clubTimerBtn" class="clubTimerRibbon ${live?"active "+a.status:""}" aria-label="Open club session timer"><span class="timerIdentity"><span class="timerIcon">⏱</span><span><span class="timerTitle">CLUB TIMER</span><br><span class="timerCaption">${esc(status)}</span></span></span><span class="timerNumbers">${live?`<span class="timerDigits" data-clock="elapsed">${formatTimer(timerElapsedMs())}</span><span class="timerBill" data-clock="estimate">${esc(timerState.settings.currency)} ${formatMoney(price.charge)}</span>`:`<span class="timerBill">START</span>`}<span class="timerArrow">›</span></span></button>`;
+  const a=timerState.active,live=!!a,price=timerEstimate(),pricing=timerSessionSettings(),status=!a?"Tap to start a club session":a.status==="running"?"RUNNING · "+pricing.club:"PAUSED · "+pricing.club;
+  return `<button id="clubTimerBtn" class="clubTimerRibbon ${live?"active "+a.status:""}" aria-label="Open club session timer"><span class="timerIdentity"><span class="timerIcon">⏱</span><span><span class="timerTitle">CLUB TIMER</span><br><span class="timerCaption">${esc(status)}</span></span></span><span class="timerNumbers">${live?`<span class="timerDigits" data-clock="elapsed">${formatTimer(timerElapsedMs())}</span><span class="timerBill" data-clock="estimate">${esc(pricing.currency)} ${formatMoney(price.charge)}</span>`:`<span class="timerBill">START</span>`}<span class="timerArrow">›</span></span></button>`;
 }
 function updateTimerDisplay(){
   if(!timerState.active)return;
   const elapsed=formatTimer(timerElapsedMs()),estimate=timerEstimate();
   document.querySelectorAll('[data-clock="elapsed"]').forEach(e=>{e.textContent=elapsed});
-  document.querySelectorAll('[data-clock="estimate"]').forEach(e=>{e.textContent=timerState.settings.currency+" "+formatMoney(estimate.charge)});
+  document.querySelectorAll('[data-clock="estimate"]').forEach(e=>{e.textContent=timerSessionSettings().currency+" "+formatMoney(estimate.charge)});
   document.querySelectorAll('[data-clock="billable"]').forEach(e=>{e.textContent=billableLabel(estimate.billableMs)});
 }
 function timerRedraw(){render();if(openPanel==="timer")renderSheet()}
-function setClubRate(rate){let n=Number(rate);if(!Number.isFinite(n)||n<0)n=0;timerState.settings.hourlyRate=Math.min(100000000,Math.round(n*100)/100);saveClubTimer();timerRedraw()}
-function setClubBilling(billing){if(!["exact","half","hour"].includes(billing))return;timerState.settings.billing=billing;saveClubTimer();timerRedraw()}
-function setClubCurrency(currency){timerState.settings.currency=String(currency||"AFN").replace(/[^\w .-]/g,"").trim().slice(0,12)||"AFN";saveClubTimer();timerRedraw()}
-function setClubName(club){timerState.settings.club=String(club||"Snooker club").trim().slice(0,60)||"Snooker club";saveClubTimer();timerRedraw()}
+function setClubRate(rate){if(timerState.active)return false;let n=Number(rate);if(!Number.isFinite(n)||n<0)n=0; timerState.settings.hourlyRate=Math.min(100000000,Math.round(n*100)/100);if(timerState.settings.clubId!=="custom")timerState.presets[timerState.settings.clubId+":"+timerState.settings.sectionId]=timerState.settings.hourlyRate;saveClubTimer();timerRedraw()}
+function setClubBilling(billing){if(timerState.active||!["exact","half","hour"].includes(billing))return;timerState.settings.billing=billing;saveClubTimer();timerRedraw()}
+function setClubCurrency(currency){if(timerState.active)return;timerState.settings.currency=String(currency||"AFN").replace(/[^\w .-]/g,"").trim().slice(0,12)||"AFN";saveClubTimer();timerRedraw()}
+function setClubName(club){if(timerState.active)return;timerState.settings.clubId="custom";timerState.settings.club=String(club||"Snooker club").trim().slice(0,60)||"Snooker club";saveClubTimer();timerRedraw()}
 function startClubSession(){
   if(timerState.active)return false;
   if(!(timerState.settings.hourlyRate>0))return false;
-  const t=now();timerState.active={id:uid(),status:"running",startedAt:t,segmentStart:t,elapsedMs:0};
+  const t=now();timerState.active={id:uid(),status:"running",startedAt:t,segmentStart:t,elapsedMs:0,pricing:{...timerState.settings}};
   saveClubTimer();timerRedraw();return true;
 }
 function pauseClubSession(){
@@ -608,13 +624,13 @@ function resumeClubSession(){
 }
 function endClubSession(){
   const a=timerState.active;if(!a)return null;
-  const endedAt=now(),totalMs=timerElapsedMs(endedAt),cost=timerEstimate(totalMs),settings={...timerState.settings};
+  const endedAt=now(),totalMs=timerElapsedMs(endedAt),cost=timerEstimate(totalMs),settings={...timerSessionSettings()};
   const receipt={id:a.id,startedAt:a.startedAt,endedAt,totalMs,billableMs:cost.billableMs,charge:cost.charge,...settings};
   timerState.history=[receipt,...timerState.history].slice(0,30);timerState.active=null;
   saveClubTimer();timerRedraw();return receipt;
 }
 function openTimer(){openPanel="timer";renderSheet()}
-function timerReceiptHTML(r){return `<div class="timerReceipt"><h4>${esc(r.club||"Snooker club")} · ${esc(new Date(r.endedAt).toLocaleDateString())}</h4><div class="line"><span>Played</span><span>${formatTimer(r.totalMs)}</span></div><div class="line"><span>Billable time</span><span>${billableLabel(r.billableMs)}</span></div><div class="line"><span>${esc(billingLabel(r.billing))} · ${formatMoney(r.hourlyRate)}/${esc(r.currency)}/hour</span><strong>${esc(r.currency)} ${formatMoney(r.charge)}</strong></div></div>`}
+function timerReceiptHTML(r){return `<div class="timerReceipt"><h4>${esc(r.club||"Snooker club")}${r.sectionId?" · "+esc(timerSectionLabel(r.sectionId)):""} · ${esc(new Date(r.endedAt).toLocaleDateString())}</h4><div class="line"><span>Played</span><span>${formatTimer(r.totalMs)}</span></div><div class="line"><span>Billable time</span><span>${billableLabel(r.billableMs)}</span></div><div class="line"><span>${esc(billingLabel(r.billing))} · ${formatMoney(r.hourlyRate)}/${esc(r.currency)}/hour</span><strong>${esc(r.currency)} ${formatMoney(r.charge)}</strong></div></div>`}
 function renderTimerSheet(sheet){
   const a=timerState.active,s=timerState.settings,elapsed=timerElapsedMs(),bill=timerEstimate(elapsed);
   sheet.innerHTML=`<div class="sheetHead"><div class="sheetTitle">⏱ Club Session Timer</div><button class="close" id="x" aria-label="Close timer">×</button></div>
