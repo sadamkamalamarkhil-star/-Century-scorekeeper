@@ -424,6 +424,266 @@ body{background:radial-gradient(ellipse 90% 65% at 50% -8%,rgba(100,100,245,.22)
 .clubTimerRibbon{background:linear-gradient(112deg,#233369,#151d44)}
 .clubTimerRibbon:not(.active){background:linear-gradient(112deg,#1b2754,#141b3e)}
 @media(max-width:380px){.seatPickerRow{gap:8px;padding:8px}.seatPickerRow>span{flex-basis:60px;font-size:11px}.seatPickerRow select{font-size:15px;padding:11px 8px}}
+
+/* CueScore — premium dark graphite + racing red interface */
+:root{
+ --bg:#090b0e;--bg2:#11161b;--panel:#171d23;--panel2:#1a2128;--panel3:#202830;
+ --line:#34404b;--line-soft:#242e38;--text:#f6f7fa;--muted:#9ca8b6;
+ --accent:#f14752;--accent-soft:#4e1822;--gold:#f14752;--gold-soft:rgba(241,71,82,.12);
+ --cue-red:#e11f35;--cue-red-light:#ff5a68;--seat-accent:#f14752;
+}
+html,body{background:#090b0e;color:#f7f8fb}
+body{
+ background:radial-gradient(ellipse 52% 30% at 95% 2%,rgba(150,22,33,.095),transparent 80%),
+ radial-gradient(ellipse 45% 40% at -10% 90%,rgba(162,19,30,.065),transparent 77%),
+ linear-gradient(170deg,#101318 0%,#090c10 62%,#07090c 100%);
+}
+.app,.app.tableLandscape{max-width:1320px}
+.top{border-bottom:1px solid rgba(255,255,255,.09);padding:5px 2px 15px;gap:14px}
+.brandWrap{gap:11px;min-width:0}
+.logoOrb{width:48px;height:48px;border-radius:14px;border:1px solid rgba(230,54,70,.5);background:#0c0c10;box-shadow:0 0 14px rgba(241,35,50,.22)}
+.logoOrb img{filter:none;object-fit:cover;border-radius:12px}
+.brand{font-size:18px;letter-spacing:.18em;font-weight:900;color:#f8f9fb;gap:9px}
+.brandBadge{letter-spacing:.13em;font-size:9px;background:rgba(217,38,56,.12);border-color:rgba(241,71,82,.27);color:#fa9aa5}
+.subtitle{letter-spacing:.19em;font-size:9px;color:#9aa4b1;margin-top:4px}
+.mode{min-width:155px;background:#14191f;border:1px solid #353e49;padding:3px;border-radius:11px;box-shadow:inset 0 1px 2px rgba(0,0,0,.5)}
+.mode button{font-size:10px;letter-spacing:.03em;color:#a8b0bc;border-radius:8px;padding:10px 10px}
+.mode button.active{background:linear-gradient(160deg,#991d2d,#4e1722);border-color:rgba(251,89,105,.49);color:white;box-shadow:0 0 12px rgba(231,31,53,.13)}
+.toolbar{background:linear-gradient(145deg,#171e25,#12171d);border:1px solid #343f49;border-radius:14px;box-shadow:0 9px 24px rgba(0,0,0,.24)}
+.chip{background:linear-gradient(145deg,#20252c,#131920);border:1px solid #45505a;color:#f0f1f5;border-radius:10px;font-size:9px;letter-spacing:.08em}
+.chip.good{color:#f0f2f6;background:#1a2128;border-color:#47525c}
+.actions{gap:6px}
+.iconBtn{background:linear-gradient(155deg,#252d36,#141b23);border:1px solid #46515c;color:#f3f5f8;border-radius:11px;box-shadow:0 1px 1px rgba(255,255,255,.055) inset}
+.iconBtn:hover{color:#fff;background:#303943;border-color:#dc5c68}
+.iconBtn:disabled{opacity:.33}
+.clubTimerRibbon,.clubTimerRibbon:not(.active){
+ border:1px solid #424c55;background:linear-gradient(155deg,#222a33,#141b22 86%);
+ border-radius:15px;box-shadow:inset 0 1px 1px rgba(255,255,255,.055),0 9px 24px rgba(0,0,0,.22);
+ padding:8px 10px 8px 15px;min-height:67px;margin:10px 0 12px
+}
+.clubTimerRibbon .timerTitle{color:#f7f8fa;font-size:11px;letter-spacing:.17em}
+.clubTimerRibbon .timerIcon{font-size:24px}
+.clubTimerRibbon .timerCaption{color:#aab3bf;font-size:10px}
+.clubTimerRibbon .timerBill{color:#ff7d8c;font-size:15px}
+.clubTimerRibbon .timerDigits{color:white;font-size:17px}
+.clubTimerRibbon .timerStartCue{
+ display:flex;align-items:center;gap:12px;justify-content:center;border-radius:11px;
+ min-width:98px;min-height:43px;padding:0 15px;
+ background:linear-gradient(145deg,#e52c3b,#a01425);color:white;
+ border:1px solid rgba(255,121,132,.52);
+ box-shadow:inset 0 1px rgba(255,255,255,.13),0 4px 14px rgba(215,19,40,.25);
+ font-size:11px;font-weight:950;letter-spacing:.12em
+}
+.clubTimerRibbon .timerStartCue span{font-size:22px;font-weight:500;line-height:1}
+.safetyBar{gap:9px;margin:0 0 13px;justify-content:flex-end}
+.safetyBar button,.safetyBar button.locked{
+ background:linear-gradient(145deg,#202730,#121820);border:1px solid #46515f;
+ color:#f4f5f9;border-radius:11px;min-height:39px;padding:10px 13px;font-size:10px;letter-spacing:.045em;
+ box-shadow:inset 0 1px rgba(255,255,255,.06)
+}
+.safetyBar button.locked{border-color:#eb4257;color:#fff;background:#422029}
+.players{gap:9px}
+.player,.app.tableLandscape .player{
+ background:linear-gradient(165deg,#1f262d,#121920 92%);
+ border:1px solid #38434e;border-radius:15px;box-shadow:0 8px 18px rgba(0,0,0,.27),inset 0 1px rgba(255,255,255,.035);
+ padding:12px 14px
+}
+.player:before{background:radial-gradient(circle at 100% 0,rgba(255,255,255,.035),transparent 50%)}
+.player.active,.app.tableLandscape .player.active{
+ border-color:#fc7886;outline:none;box-shadow:0 0 0 1px rgba(255,100,117,.38),0 0 18px rgba(241,36,56,.2),inset 0 1px rgba(255,255,255,.06)
+}
+.player .name{color:#e9edf3;font-size:12px}
+.player.active .name{color:#fff}
+.player .score{font-size:39px;margin:7px 0 6px;color:#f7f8fa}
+.player .meta{color:#b0bbc7}
+.playerTypeBadge{background:#222b34;border:1px solid #465361;color:#e0e5eb}
+.playerTypeBadge.regular{background:#232c36;border-color:#425364;color:#edf0f6}
+.playerTypeBadge.guest{background:#35242a;color:#ffb5bc;border-color:#894552}
+.progress{background:#272e36}
+.progress>i{background:linear-gradient(90deg,#fc5567,#bd1d31)}
+.badge{background:#3c222c;border-color:#973e4c;color:#ffadb6}
+.status,.lastActionCard,.recent{
+ background:linear-gradient(155deg,#1b2229,#10171e);border:1px solid #353f4b;border-radius:13px;
+ color:#afb9c4;box-shadow:0 7px 17px rgba(0,0,0,.17)
+}
+.status b{color:#fff}
+.status span:first-child b{color:#fff}
+.lastActionCard{margin-top:9px;padding:12px 14px}
+.lastActionLabel{color:#9eaab7;font-size:9px;letter-spacing:.21em}
+.lastActionText{color:#f5f5f7;font-size:13px}
+.ballGrid{
+ background:transparent;border:0;box-shadow:none;
+ border-radius:0;gap:8px;padding:0;margin-top:10px;
+}
+.ballGrid .ball{
+ --orb-hi:#e5e5e5;--orb:#777;--orb-deep:#111;
+ min-width:0;height:112px;gap:0;padding:8px 3px 7px;
+ background:linear-gradient(160deg,#222931,#10161d) !important;
+ border:1px solid #35404a;border-radius:14px;color:#f7f8fa;
+ box-shadow:inset 0 1px 1px rgba(255,255,255,.07),0 8px 16px rgba(0,0,0,.26);
+ outline:none !important;position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center
+}
+.ballGrid .ball:not(:disabled):hover{border-color:#9c535d;filter:brightness(1.07)}
+.ballGrid .ball:active{transform:scale(.97)}
+.ballGrid .ball:disabled{opacity:.42;filter:saturate(.53)}
+.cueOrb{
+ --orb-hi:#efefef;--orb:#aaa;--orb-deep:#3c3c3c;
+ display:block;width:58px;height:58px;min-height:58px;max-width:72%;
+ border-radius:50%;position:relative;flex:none;
+ background:
+ radial-gradient(ellipse 17% 12% at 27% 18%,rgba(255,255,255,.95),transparent 85%),
+ radial-gradient(circle at 33% 24%,var(--orb-hi) 0%,var(--orb) 38%,var(--orb-deep) 81%,#080a0e 100%);
+ box-shadow:
+ inset -6px -8px 10px rgba(0,0,0,.57),
+ inset 3px 4px 6px rgba(255,255,255,.26),
+ 0 6px 7px rgba(0,0,0,.62),
+ 0 12px 13px rgba(0,0,0,.28);
+}
+.cueOrb:before{
+ content:"";position:absolute;top:11%;left:17%;width:32%;height:20%;
+ background:linear-gradient(140deg,rgba(255,255,255,.94),rgba(255,255,255,.28));
+ border-radius:70% 35% 55% 25%;transform:rotate(-32deg);
+ filter:blur(.6px);opacity:.92
+}
+.cueOrb:after{
+ content:"";position:absolute;bottom:10%;right:18%;width:26%;height:6%;
+ background:rgba(255,255,255,.24);border-radius:50%;transform:rotate(-26deg);filter:blur(3px)
+}
+.cueOrb.red{--orb-hi:#ff5662;--orb:#dd001c;--orb-deep:#550008}
+.cueOrb.yellow{--orb-hi:#fff48e;--orb:#f2be00;--orb-deep:#825600}
+.cueOrb.green{--orb-hi:#75f8b2;--orb:#009c3b;--orb-deep:#034b26}
+.cueOrb.brown{--orb-hi:#eeaf86;--orb:#98512d;--orb-deep:#391708}
+.cueOrb.blue{--orb-hi:#84c8ff;--orb:#0876d9;--orb-deep:#072e80}
+.cueOrb.pink{--orb-hi:#ffd7df;--orb:#ec6594;--orb-deep:#8b194e}
+.cueOrb.black{--orb-hi:#5d6269;--orb:#131922;--orb-deep:#020308}
+.cueOrb.white{--orb-hi:#fff;--orb:#edebea;--orb-deep:#85828b}
+.ballGrid .ball .cueBallName,.passPanel .ball .cueBallName{
+ display:block;font-size:9px;line-height:1.1;color:#f7f7f9;letter-spacing:.1em;font-weight:900;text-transform:uppercase;margin-top:7px
+}
+.ballGrid .ball .cueBallValue,.passPanel .ball .cueBallValue{
+ display:block;line-height:1.1;color:#e8e9ed;font-size:12px;font-weight:800;margin-top:4px
+}
+.ballGrid .ball.red{background:linear-gradient(160deg,#28191e,#11161e)!important}
+.ballGrid .ball.yellow{background:linear-gradient(160deg,#25231a,#11161c)!important}
+.ballGrid .ball.green{background:linear-gradient(160deg,#172520,#11161c)!important}
+.ballGrid .ball.brown{background:linear-gradient(160deg,#28201c,#11161c)!important}
+.ballGrid .ball.blue{background:linear-gradient(160deg,#172331,#11161e)!important}
+.ballGrid .ball.pink{background:linear-gradient(160deg,#2b1c27,#11161c)!important}
+.ballGrid .ball.black{background:linear-gradient(160deg,#1c2229,#0e1218)!important}
+.ballGrid .ball.missRedTile{background:linear-gradient(160deg,#20262b,#10161c)!important}
+.cueOrb.missCueOrb{display:grid;place-items:center}
+.cueOrb.missCueOrb i{font-style:normal;position:relative;z-index:1;color:#d92232;font-size:47px;line-height:1;font-weight:900;text-shadow:0 1px 1px rgba(255,255,255,.3)}
+.controlDock{background:linear-gradient(180deg,rgba(9,12,16,0) 0%,rgba(9,12,16,.85) 25%,rgba(9,12,16,.98) 100%)}
+.controls.century{grid-template-columns:2fr 1fr}
+.missPrimary,.app.tableLandscape .missPrimary{
+ min-height:69px;color:#fff !important;font-size:14px;font-weight:900;
+ background:linear-gradient(160deg,#e12537,#a10c21)!important;
+ border:1px solid #f45160 !important;border-radius:13px;
+ box-shadow:inset 0 1px rgba(255,255,255,.18),0 9px 19px rgba(166,12,26,.28)
+}
+.missPrimary b{display:flex;justify-content:center;align-items:center;gap:9px;font-size:16px;letter-spacing:.065em}
+.missPrimary b span{font-size:28px;font-weight:400;line-height:.5}
+.controls .danger,.controls .secondary:not(.missPrimary){
+ background:linear-gradient(160deg,#202932,#10171e);border:1px solid #3d4a55;color:#edf0f3;
+ border-radius:13px;font-size:12px;font-weight:900;letter-spacing:.09em
+}
+.controls .danger:before{content:"⚠";margin-right:8px;font-size:15px}
+.controls .danger:hover{background:#2d333c}
+.recent{padding:12px 13px;margin-top:13px}
+.recentHead .label{display:flex;align-items:center;gap:8px;color:#f4f6f7;font-size:10px;letter-spacing:.12em}
+.liveDot{width:8px;height:8px;display:inline-block;background:#f52a42;border-radius:100%;box-shadow:0 0 10px rgba(245,42,66,.34)}
+.smallBtn{background:#20272e;border:1px solid #3a4550;color:#f0f2f5;padding:8px 12px}
+.recentHead #newBtn{background:linear-gradient(155deg,#b52030,#811724);border-color:#d04c5a;color:#fff}
+.logline{background:#171e25;border-color:#333d48;color:#aab5bf}
+.panel,.passPanel,.winner,.sheet,.timerHero{
+ background:linear-gradient(152deg,#222930,#10171d);border-color:#434d57;
+ box-shadow:0 12px 30px rgba(0,0,0,.26)
+}
+.passPanel .cueOrb{width:40px;height:40px;min-height:40px}
+.passPanel .ball{height:94px;padding:6px}
+.sheetBackdrop{background:rgba(0,0,0,.83)}
+.sheet{background:linear-gradient(158deg,#202830,#11171e 78%);border:1px solid #4b525b}
+.sheetHead{background:linear-gradient(180deg,#202830 79%,rgba(32,40,48,.94))}
+.sheetTitle,.sectionTitle,.panelLabel,.lastActionLabel{color:#e5e9ed}
+.sheetTitle{letter-spacing:.15em}
+.field input,.field select,.seatPickerRow select{background:#202932;color:#f4f6f8;border:1px solid #48545d}
+.field input:focus,.field select:focus,.seatPickerRow select:focus{border-color:#f05161;box-shadow:0 0 0 2px rgba(241,71,82,.15)}
+.option,.tab,.filter{background:#202830;border:1px solid #46505a;color:#d5dce3}
+.option.active,.tab.active,.filter.active{background:#481c28;border-color:#e9485b;color:#fff}
+.seatDirection{background:#24282d;border-color:#484f59;color:#ebedf2}
+.seatDirection span{color:#ff6475}
+.seatPickerRow{background:#191f26;border:1px solid #3e4854}
+.seatPickerRow>span{color:#f4f6fa}
+.seatPickerApply,.primary,.timerStart{background:linear-gradient(155deg,#db2638,#8c1524)!important;border:1px solid #ed5866!important;color:#fff}
+.resultCard,.statCard{background:linear-gradient(150deg,#202831,#121a21);border-color:#3e4a54}
+.timerHero .timerHeroTitle,.timerHero .timerHeroBill,.timerReceipt .line strong{color:#ff7784}
+.timerControls .timerStart{background:linear-gradient(155deg,#db2638,#8c1524)!important;border-color:#ed5866}
+.timerReceipt{background:#1b232a;border-color:#3e4954}
+.safetyBar button{background:linear-gradient(160deg,#242c33,#121920);border-color:#454e58;color:#f7f8fa}
+.safetyBar button.locked{background:#481c28;border-color:#e9485b;color:#fff}
+@media(min-width:700px){
+ .ballGrid{grid-template-columns:repeat(8,minmax(0,1fr));gap:10px}
+ .ballGrid .ball{height:145px}
+ .cueOrb{width:68px;height:68px;min-height:68px}
+ .players.p2{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .player .score{font-size:46px}
+}
+@media(max-width:699px){
+ .app{padding:11px 11px calc(25px + env(safe-area-inset-bottom))}
+ .brand{font-size:16px;letter-spacing:.12em}
+ .brandBadge{display:none}
+ .subtitle{font-size:8px;letter-spacing:.09em}
+ .logoOrb{width:39px;height:39px;border-radius:12px}
+ .mode{min-width:135px}
+ .mode button{font-size:9px;padding:9px 6px}
+ .toolbar{padding:7px;gap:6px}
+ .actions{gap:4px}
+ .iconBtn{width:32px;height:34px;font-size:16px}
+ .chip{font-size:8px;padding:6px 8px}
+ .player,.app.tableLandscape .player{padding:11px 10px}
+ .player .score{font-size:37px}
+ .ballGrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+ .ballGrid .ball{height:116px;padding:7px 2px}
+ .cueOrb{width:51px;height:51px;min-height:51px}
+ .ballGrid .ball .cueBallName{font-size:8px}
+ .ballGrid .ball .cueBallValue{font-size:11px}
+ .cueOrb.missCueOrb i{font-size:42px}
+ .missPrimary{min-height:62px}
+ .missPrimary b{font-size:12px}
+ .clubTimerRibbon{min-height:60px}
+ .safetyBar button{font-size:9px;min-height:40px;padding:10px}
+}
+@media(max-width:350px){
+ .ballGrid{gap:5px}
+ .ballGrid .ball{height:103px}
+ .cueOrb{width:43px;height:43px;min-height:43px}
+ .brand{font-size:14px}
+}
+@media(orientation:landscape) and (max-height:520px){
+ .app,.app.tableLandscape{padding:5px 10px 6px}
+ .top{padding:2px 0 7px}
+ .logoOrb{width:32px;height:32px}
+ .brand{font-size:14px}
+ .toolbar{margin-bottom:6px;padding:5px 8px}
+ .clubTimerRibbon{margin:5px 0 7px;min-height:45px;padding:4px 8px 4px 12px}
+ .clubTimerRibbon .timerStartCue{min-height:32px;min-width:88px}
+ .safetyBar{margin-bottom:7px}
+ .safetyBar button{min-height:29px;padding:5px 10px}
+ .players,.app.tableLandscape .players{gap:7px}
+ .player,.app.tableLandscape .player{padding:7px 11px}
+ .player .score,.app.tableLandscape .player .score{font-size:30px;margin:4px 0 2px}
+ .status{margin-top:6px;padding:7px 10px}
+ .lastActionCard{margin-top:5px;padding:7px 11px}
+ .ballGrid,.app.tableLandscape .ballGrid{grid-template-columns:repeat(8,minmax(0,1fr));gap:7px;padding:0;margin-top:6px;background:transparent}
+ .ballGrid .ball,.app.tableLandscape .ballGrid .ball{height:104px;padding:5px 2px}
+ .cueOrb{width:47px;height:47px;min-height:47px}
+ .ballGrid .ball .cueBallName{font-size:8px;margin-top:6px}
+ .ballGrid .ball .cueBallValue{font-size:10px}
+ .controlDock{margin-top:5px;padding-top:3px;position:static}
+ .missPrimary,.app.tableLandscape .missPrimary{min-height:51px}
+ .recent{margin-top:6px}
+}
+
 </style>
 </head>
 <body>
