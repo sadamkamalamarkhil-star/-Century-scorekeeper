@@ -1,17 +1,30 @@
 {
-  "name": "Century & Snooker Scorekeeper",
-  "short_name": "Century",
+  "name": "CueScore — Club Snooker & Century",
+  "short_name": "CueScore",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#080b1e",
-  "theme_color": "#080b1e",
+  "background_color": "#090b0e",
+  "theme_color": "#090b0e",
   "icons": [
     {
-      "src": "apple-touch-icon.png",
-      "sizes": "180x180",
+      "src": "cuescore-icon.png",
+      "sizes": "64x64",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     }
-  ]
+  ],
+  "description": "CueScore keeps score for Afghan Century and Snooker, with club timer, match history, player profiles and seat management."
 }
