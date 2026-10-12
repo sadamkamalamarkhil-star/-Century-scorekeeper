@@ -690,6 +690,9 @@ function displaySeatOrder(which=mode){
  if(!valid){visualLayouts[which]={gameId:st.gameId,order:fallback};write(seatLayoutKey,visualLayouts)}
  return visualLayouts[which].order.slice();
 }
+function nextVisualIndex(current,which=mode){const order=displaySeatOrder(which),pos=order.indexOf(current);return pos<0?current:order[(pos+1)%order.length]}
+function placePlayerAtSeat(order,seat,player){const arr=order.slice(),from=arr.indexOf(player);if(!Number.isInteger(seat)||seat<0||seat>=arr.length||from<0)return arr;[arr[seat],arr[from]]=[arr[from],arr[seat]];return arr}
+function saveSeatArrangement(order){if(scoreLocked)return false;const current=displaySeatOrder(),st=mode==="century"?cState:sState;if(!Array.isArray(order)||order.length!==current.length||new Set(order).size!==order.length||order.some(i=>!current.includes(i)))return false;visualLayouts[mode]={gameId:st.gameId,order:order.slice()};write(seatLayoutKey,visualLayouts);render();return true}
 function swapDisplayedSeats(a,b){if(scoreLocked){showToast("Unlock scoring first");return false}
  const order=displaySeatOrder();
  if(!Number.isInteger(a)||!Number.isInteger(b)||a<0||b<0||a>=order.length||b>=order.length||a===b)return false;
