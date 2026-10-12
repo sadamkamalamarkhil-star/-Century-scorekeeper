@@ -401,6 +401,29 @@ button:active{transform:scale(.975)}
 
 .safetyBar{display:flex;align-items:center;gap:7px;justify-content:flex-end;margin:-4px 0 10px}.safetyBar button{border:1px solid #3d4a88;border-radius:11px;background:#161d40;color:#e4e9ff;padding:8px 12px;font-size:10px;font-weight:900;letter-spacing:.03em}.safetyBar button.locked{border-color:#a78bfa;background:#2f235b;color:#ddd6fe}.ball:disabled{opacity:.5}
 .clubPresetGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:8px}.ratePreset{display:flex;flex-direction:column;gap:5px;padding:9px;border:1px solid #3c4a88;border-radius:12px;background:#161c3c}.ratePreset span{font-size:10px;font-weight:800;color:#e4e9ff}.ratePreset input{width:100%;min-width:0;border:1px solid #54639e;border-radius:8px;background:#252b57;color:white;font-size:16px;padding:8px}
+/* Midnight Cobalt visual system + direct seat assignment */
+body{background:radial-gradient(ellipse 90% 65% at 50% -8%,rgba(100,100,245,.22),transparent 74%),radial-gradient(ellipse 70% 50% at 100% 95%,rgba(64,108,229,.12),transparent 75%),linear-gradient(180deg,#0b0d26 0%,#090d20 65%,#050819 100%)}
+.logoOrb img{filter:hue-rotate(117deg) saturate(1.1)}
+.player{background:linear-gradient(160deg,rgba(33,41,91,.95),rgba(17,24,58,.94))}
+.player.active{border-color:#6baaff;outline:1px solid rgba(167,139,250,.42);box-shadow:0 0 0 1px rgba(96,165,250,.32),0 0 24px rgba(82,121,246,.24)}
+.player.active .name,.status span:first-child b{color:#c4b5fd}
+.primary,.missPrimary{background:linear-gradient(125deg,#3455d6,#6c46dd)!important;border:1px solid rgba(169,153,255,.7)!important;box-shadow:0 12px 25px rgba(66,76,186,.2)}
+.timerControls .timerStart{background:linear-gradient(125deg,#3455d6,#6c46dd);border-color:rgba(169,153,255,.7)}
+.sheet{background:linear-gradient(155deg,#1c2550,#101734 72%);border-color:rgba(143,159,255,.45);box-shadow:0 32px 70px rgba(3,6,24,.65)}
+.sheetHead{background:linear-gradient(180deg,#1c244d 82%,rgba(28,36,77,.91))}
+.seatDirection{margin:14px 0 10px;padding:12px 14px;border-radius:13px;background:rgba(97,117,236,.16);border:1px solid rgba(115,137,249,.35);color:#d5defe;display:flex;gap:14px;align-items:center;justify-content:center;font-size:11px;font-weight:900;letter-spacing:.15em}
+.seatDirection span{font-size:18px;color:#a78bfa}
+.seatPickerList{display:grid;gap:10px;margin:16px 0}
+.seatPickerRow{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:10px;border-radius:15px;border:1px solid rgba(126,142,232,.28);background:rgba(20,29,69,.86)}
+.seatPickerRow>span{flex:0 0 70px;font-size:12px;font-weight:900;letter-spacing:.045em;color:#d8e2ff;text-transform:uppercase}
+.seatPickerRow select{flex:1;min-width:0;max-width:100%;font-size:16px;font-weight:800;padding:12px 10px;border:1px solid rgba(128,151,255,.58);border-radius:12px;background:#293765;color:#f7f9ff;outline:none}
+.seatPickerRow select:focus{border-color:#a78bfa;box-shadow:0 0 0 2px rgba(167,139,250,.22)}
+.seatPickerApply{width:100%;min-height:53px;margin-top:5px;font-size:16px}
+.safetyBar button{border-color:#4156a3;background:#192347;color:#e2e8ff}
+.safetyBar button.locked{border-color:#a78bfa;background:#31275b;color:#e8d5ff}
+.clubTimerRibbon{background:linear-gradient(112deg,#233369,#151d44)}
+.clubTimerRibbon:not(.active){background:linear-gradient(112deg,#1b2754,#141b3e)}
+@media(max-width:380px){.seatPickerRow{gap:8px;padding:8px}.seatPickerRow>span{flex-basis:60px;font-size:11px}.seatPickerRow select{font-size:15px;padding:11px 8px}}
 </style>
 </head>
 <body>
