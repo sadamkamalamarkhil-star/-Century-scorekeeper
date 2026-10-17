@@ -121,7 +121,10 @@
   function results(value) {
     return arrayOf(result => object(result) && string(result.id) && result.id.length > 0 &&
       arrayOf(string)(result.players) && result.players.length >= 2 && result.players.length <= 4 &&
-      arrayOf(number)(result.scores) && result.scores.length === result.players.length && fields(result, {
+      // Older saves can retain extra scores after a player-count change.
+      // The app reads scores by player index and tolerates missing values;
+      // keep the complete numeric array without inventing or dropping seats.
+      arrayOf(number)(result.scores) && fields(result, {
         mode, winner: value => value === null || range(0, result.players.length - 1)(value),
         best: arrayOf(nonnegative), playerRefs: arrayOf(reference),
         startedAt: number, endedAt: number, losers: arrayOf(string), reason: string,

@@ -27,6 +27,8 @@ Use **Backup & transfer** in Settings, or open `backup.html` on the same site an
 
 The backup page must first be deployed at the original site for step 2 to work. Opening a local HTML file or a different site cannot read the phone's existing data. Do not clear the phone's browser data before exporting. Only data still present in that browser can be recovered; this tool cannot reconstruct previously deleted games.
 
+Some older results contain more saved scores than player names. Import preserves those numeric arrays exactly. Scores without a matching player name remain in the backup but cannot be attributed in Results or Stats; no player identity is guessed.
+
 Backup/restore is a manual transfer. **This version does not provide live shared storage or club invitations.** Publishing the same static files on another host does not synchronize devices. No phone history has been bundled into this repository.
 
 ## Invited club sharing: deployment requirement

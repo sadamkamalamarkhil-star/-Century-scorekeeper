@@ -274,6 +274,46 @@ class BackupBrowserTests(unittest.TestCase):
         self.assertEqual(self.page.locator("#status").get_attribute("data-kind"), "success")
         self.assertTrue(self.page.locator("#restorePreview").is_visible())
 
+    def test_older_numeric_score_arrays_keep_every_value_and_render_safely(self):
+        # Earlier app versions could save fewer names than scores after player
+        # count changes. Preserve every stored score without inventing names.
+        records = [
+            {"id": "synthetic-longer-scores", "mode": "century",
+             "players": ["Fixture Player A", "Fixture Player B"],
+             "scores": [100, 25, 50], "best": [30, 20, 10], "winner": 0,
+             "target": 100, "startedAt": 1, "endedAt": 2},
+            {"id": "synthetic-shorter-scores", "mode": "snooker",
+             "players": ["Fixture Player A", "Fixture Player B"],
+             "scores": [42], "best": [15], "winner": 0,
+             "startingReds": 15, "startedAt": 3, "endedAt": 4},
+        ]
+        raw = json.dumps(records, indent=2)
+        storage = {**self.source, PREFIX + "results.v4": raw}
+        before = {"unrelated.account": "keep"}
+        self.seed(before)
+        self.upload(self.archive(storage=storage))
+        self.page.wait_for_timeout(100)
+        self.assertEqual(self.page.locator("#status").get_attribute("data-kind"), "success")
+        self.page.locator("#confirmReplace").check()
+        self.downloaded_json(lambda: self.page.locator("#restoreBackup").click())
+        self.assertEqual(self.stored(), {**storage, **before})
+
+        errors = []
+        self.page.on("pageerror", lambda error: errors.append(str(error)))
+        self.page.goto(BASE_URL + "/")
+        self.page.locator("#logBtn").click()
+        self.page.locator('[data-tab="results"]').click()
+        self.assertEqual(self.page.locator("#resultList [data-rid]").count(), 2)
+        self.page.locator('[data-rid="synthetic-longer-scores"]').click()
+        self.assertIn("Fixture Player A 100", self.page.locator("#resultList").inner_text())
+        self.page.locator('[data-tab="stats"]').click()
+        self.assertIn("Fixture Player A", self.page.locator("#histBody").inner_text())
+        self.assertFalse(errors)
+        # Main-app migrations may format strings or add references. They must
+        # keep both complete numeric arrays, including the unlabelled score.
+        saved = self.page.evaluate("JSON.parse(localStorage.getItem('centurySnooker.results.v4'))")
+        self.assertEqual({r["id"]: r["scores"] for r in saved}, {r["id"]: r["scores"] for r in records})
+
     def test_preview_is_text_only_and_stale_destination_is_not_overwritten(self):
         self.seed({PREFIX + "mode.v4": '"century"'})
         archive = self.archive(sourceOrigin='<img src=x onerror="window.injected=true">')
