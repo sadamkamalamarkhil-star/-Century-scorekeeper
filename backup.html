@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111318">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'unsafe-inline'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Backup & transfer · CueScore</title>
+  <style>
+    :root{color-scheme:dark;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#101216;color:#f3f4f7;font-size:16px;line-height:1.55}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top left,#32151d 0,transparent 65%);min-height:100vh}main{width:min(100%,760px);margin:auto;padding:24px 18px 60px}a{color:#ff8b9a;text-underline-offset:3px}header{margin:12px 0 28px}.brand{letter-spacing:.18em;font-size:12px;font-weight:800;color:#ff8b9a}h1{font-size:clamp(28px,6vw,38px);line-height:1.15;margin:12px 0}h2{font-size:21px;line-height:1.25;margin:0 0 10px}p{margin:10px 0;color:#c2c7d1}.card{border:1px solid #343943;border-radius:18px;background:#191c23;padding:20px;margin:18px 0}.note{font-size:14px}.warning{border-left:3px solid #ff7187;padding-left:13px;color:#f5d6dc}button,.fileLabel{display:block;width:100%;border:1px solid #df405e;border-radius:11px;background:#c72c49;color:white;padding:13px 16px;font:inherit;font-weight:700;cursor:pointer;text-align:center;margin-top:14px;min-height:48px}button:disabled{opacity:.45;cursor:default}button:hover:not(:disabled),.fileLabel:hover{background:#e13a59}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #fff;outline-offset:4px}input[type=file]{display:block;width:100%;max-width:100%;margin:16px 0;color:#c2c7d1}input[type=file]::file-selector-button{background:#292e38;color:#fff;border:1px solid #5f6878;border-radius:8px;font:inherit;padding:10px;margin-right:10px;cursor:pointer}.summary{white-space:pre-wrap;overflow-wrap:anywhere;color:#e3e5eb;font-variant-numeric:tabular-nums;background:#111318;border-radius:10px;padding:14px;font-size:14px}.confirmation{display:flex;gap:12px;align-items:flex-start;margin:18px 0;font-weight:600}.confirmation input{margin-top:5px;width:21px;height:21px;flex:none;accent-color:#df405e}#status{overflow-wrap:anywhere;padding:0}#status:not(:empty){margin:20px 0;padding:16px;border-radius:12px;background:#202c25;border:1px solid #538f65}#status[data-kind=error]{background:#341c24;border-color:#de5571;color:#ffced8}ol{padding-left:23px;color:#c2c7d1}li{padding:4px 0}[hidden]{display:none!important}.back{display:inline-block;padding:6px 0}.step{font-size:12px;letter-spacing:.12em;color:#ff8b9a;font-weight:800;margin-bottom:8px}
+  </style>
+  <script src="backup.js" defer></script>
+</head>
+<body>
+<main>
+  <a class="back" href="./">‹ Back to CueScore</a>
+  <header><div class="brand">CUESCORE · YOUR TABLE. YOUR RULES.</div><h1>Keep your game with you.</h1><p>Export from the same site and browser that holds your games.</p></header>
+  <details class="card">
+    <summary id="transferHeading">Moving from the GitHub site</summary>
+    <ol>
+      <li>On your phone, open this backup page on the <strong>original GitHub site</strong>, using the same browser or installed app that holds your games. Export the backup there.</li>
+      <li>Send the downloaded JSON file to your destination device, or keep it in Files on your phone.</li>
+      <li>Open this page on the new CueScore site, choose the file, review it, then restore.</li>
+    </ol>
+    <p class="note">Browsers keep data separately for each site origin and browser profile. A destination browser cannot read your phone’s localStorage. This is a manual transfer, not live club sync. This page does not upload existing histories or any backup contents anywhere.</p>
+    <p class="note">Backups contain player names, scores and club receipts. Keep them private. Only data still stored in this browser can be exported; previously deleted records cannot be recovered.</p>
+  </details>
+  <section class="card" aria-labelledby="exportHeading">
+    <div class="step">1 · SAVE A COPY</div><h2 id="exportHeading">Back up this browser</h2>
+    <p>Includes results, regular profiles, both current games, undo and redo, settings, seating, scoring lock and club timer receipts, including older CueScore storage.</p>
+    <button id="exportBackup" type="button">Download backup JSON</button>
+    <div id="currentSummary" class="summary" style="margin-top:14px">Reading this browser’s data…</div>
+  </section>
+  <section class="card" aria-labelledby="importHeading">
+    <div class="step">2 · BRING YOUR DATA HERE</div><h2 id="importHeading">Review a backup</h2>
+    <p>Choose a CueScore backup JSON file (up to 20 MiB). Choosing a file only previews it.</p>
+    <label for="backupFile">Backup file</label><input id="backupFile" type="file" accept=".json,application/json">
+    <div id="restorePreview" hidden>
+      <h2>Before you restore</h2><div id="previewSummary" class="summary"></div>
+      <p class="warning">Restore replaces all CueScore data currently saved on this device for this site, including unfinished games and history. It does not merge histories. Close other CueScore tabs first.</p>
+      <p class="note">A safety backup of this browser’s current data downloads automatically before any changes. Allow the download and keep that file. Existing unrelated browser storage is preserved.</p>
+      <p class="note">A running club timer keeps its original start time, so time away still counts. Pause it on the source device before export if needed. After restore, opening the scorekeeper may apply its usual migrations and history limits.</p>
+      <label class="confirmation"><input id="confirmReplace" type="checkbox"><span>I reviewed this backup and want to replace this site’s CueScore data on this device.</span></label>
+      <button id="restoreBackup" type="button" disabled>Download safety copy & replace CueScore data</button>
+    </div>
+  </section>
+  <div id="status" role="status" aria-live="polite"></div>
+  <noscript><p class="warning">JavaScript is required to read and restore local browser storage.</p></noscript>
+</main>
+</body>
+</html>
