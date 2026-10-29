@@ -711,6 +711,274 @@ body{
 .four .ball{background-color:#1e252b}
 @media(max-width:700px){.recentHead{gap:4px}.recentHead .smallBtn{padding:7px 8px}}
 
+
+/* CueScore personal — black / gold premium scorekeeper refresh (2026-10-29) */
+:root{
+  --premium-gold:#e7bc67;
+  --premium-gold-dim:#9b7740;
+  --premium-edge:rgba(231,188,103,.25);
+  --premium-red:#d8203a;
+  --premium-red-bright:#ff3853;
+  --premium-blue:#3585e8;
+  --bg:#080c0e;--bg2:#0e1417;--panel:#10191d;--panel2:#152126;
+  --line:#38444a;--line-soft:#253137;--text:#f7f8f7;--muted:#a4b2b5;
+  --gold:#e7bc67;--gold-soft:rgba(231,188,103,.12);
+  --accent:#e7bc67;--accent-soft:rgba(231,188,103,.15);
+}
+html,body{background:#070b0d;color:var(--text)}
+body{
+  background:
+   radial-gradient(ellipse 62% 35% at 50% -9%,rgba(186,139,59,.095),transparent 80%),
+   radial-gradient(ellipse 38% 31% at -9% 82%,rgba(11,100,75,.06),transparent 80%),
+   linear-gradient(180deg,#0b1012 0%,#080b0e 48%,#06090c 100%);
+  color-scheme:dark;
+}
+.app,.app.tableLandscape{max-width:1360px;padding-top:15px}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed}
+button:focus-visible,input:focus-visible,select:focus-visible{
+  outline:2px solid var(--premium-gold)!important;outline-offset:2px;
+}
+.top{
+  padding:13px 17px 15px;margin-bottom:11px;
+  border:1px solid var(--premium-edge);border-radius:18px;
+  background:linear-gradient(125deg,rgba(23,28,27,.97),rgba(9,16,18,.93));
+  box-shadow:inset 0 1px rgba(255,255,255,.055),0 12px 28px rgba(0,0,0,.26);
+}
+.logoOrb{
+  width:49px;height:49px;border-radius:14px;
+  background:#100f0e;border:1px solid rgba(231,188,103,.62);
+  box-shadow:0 0 0 3px rgba(231,188,103,.045),0 0 24px rgba(231,188,103,.12);
+}
+.logoOrb img{border-radius:13px}
+.brand{
+  color:#f8f2e5;font-family:Georgia,"Times New Roman",serif;
+  font-size:23px;letter-spacing:.105em;font-weight:800;
+}
+.brandBadge{
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+  color:#e7bc67;border-color:rgba(231,188,103,.32);
+  background:rgba(231,188,103,.095);font-size:9px;letter-spacing:.09em;
+}
+.subtitle{color:#a8aeaa;letter-spacing:.14em;font-size:9px}
+.mode{
+  background:#0d1518;border:1px solid #45514b;min-width:198px;border-radius:13px;
+  padding:4px;
+}
+.mode button{font-size:12px;padding:11px 15px;color:#c5cbca}
+.mode button.active{
+  color:#19150c;background:linear-gradient(145deg,#f5d58d,#bf9248);
+  border-color:#f3ca77;box-shadow:0 0 17px rgba(231,188,103,.16);
+}
+.mode button[data-mode="snooker"].active{
+  color:#fff;background:linear-gradient(135deg,#e02a40,#8d1028);
+  border-color:#f45162;box-shadow:0 0 17px rgba(216,32,58,.24);
+}
+.toolbar{
+  background:linear-gradient(145deg,#151f23,#10171b);
+  border:1px solid #344447;border-radius:14px;padding:10px;
+}
+.chip{border:1px solid rgba(231,188,103,.29);background:#172124;color:#e5e6dd}
+.chip.good{
+  color:#e7bc67;border-color:rgba(231,188,103,.36);
+  background:rgba(231,188,103,.075);
+}
+.iconBtn,.safetyBar button{
+  color:#f4f4f0;background:linear-gradient(160deg,#202b2f,#111a1f);
+  border:1px solid #455359;border-radius:11px;
+}
+.iconBtn:hover,.safetyBar button:hover{border-color:var(--premium-gold)}
+.safetyBar{margin-bottom:12px;gap:9px}
+.safetyBar button.locked{background:#471e29;border-color:#e34359}
+.clubTimerRibbon,.clubTimerRibbon:not(.active){
+  background:linear-gradient(112deg,#182329,#111a1e);
+  border:1px solid #425051;border-radius:14px;
+  box-shadow:inset 0 1px rgba(255,255,255,.05),0 10px 25px rgba(0,0,0,.2);
+}
+.clubTimerRibbon .timerTitle{color:#e7bc67}
+.clubTimerRibbon .timerBill{color:#f5cc7c}
+.clubTimerRibbon .timerStartCue{
+  background:linear-gradient(145deg,#dc2942,#a10f28);
+  border-color:#ff5267;box-shadow:0 5px 15px rgba(203,24,47,.21);
+}
+.players{gap:12px}
+.player,.app.tableLandscape .player{
+  padding:16px 18px;border-radius:16px;
+  background:linear-gradient(160deg,#152125,#0c1419 94%);
+  border:1px solid #34474c;box-shadow:inset 0 1px rgba(255,255,255,.055),0 8px 24px rgba(0,0,0,.3);
+}
+.player:before{
+  background:radial-gradient(circle at 100% 0,rgba(231,188,103,.055),transparent 52%);
+}
+.player.active,.app.tableLandscape .player.active{
+  border-color:#f0445a;
+  box-shadow:inset 3px 0 0 #f0445a,0 0 0 1px rgba(240,68,90,.2),0 9px 27px rgba(0,0,0,.3);
+}
+.players.p2>.player:nth-child(2){
+  border-color:rgba(53,133,232,.48);
+}
+.players.p2>.player:nth-child(2).active{
+  border-color:#3b91f7;
+  box-shadow:inset 3px 0 0 #3b91f7,0 0 0 1px rgba(53,133,232,.2),0 9px 27px rgba(0,0,0,.3);
+}
+.player .name{color:#f4f6f4;font-size:13px}
+.player.active .name{color:#fff}
+.player .score{
+  font-size:58px;letter-spacing:-.045em;font-weight:950;line-height:1.04;
+  margin:12px 0 9px;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.19);
+}
+.player .meta{color:#bcc7c6;font-size:11px}
+.playerTypeBadge.guest{
+  background:rgba(209,44,67,.12);color:#ffb2bc;border-color:#8b4051;
+}
+.playerTypeBadge.regular{border-color:rgba(231,188,103,.42);color:#e7bc67}
+.progress{background:#283339}
+.progress>i{background:linear-gradient(90deg,#d8203a,#f4b64d)}
+.badge{color:#f2ca81;border-color:rgba(231,188,103,.45);background:rgba(231,188,103,.11)}
+.status,.lastActionCard,.recent{
+  background:linear-gradient(140deg,#142025,#0d151a);
+  border:1px solid #34474d;border-radius:14px;
+  box-shadow:0 8px 22px rgba(0,0,0,.21);
+}
+.status{padding:14px 17px;align-items:center;font-size:12px}
+.status b{color:#faf8ef;font-size:16px}
+.status span:first-child b{color:var(--premium-gold)}
+.lastActionCard{padding:12px 16px}
+.lastActionLabel{color:var(--premium-gold)}
+.lastActionText{font-size:13px}
+.ballGrid{margin-top:13px;gap:9px}
+.ballGrid .ball{
+  height:137px;
+  background:linear-gradient(165deg,#172126,#0b1216)!important;
+  border:1px solid #3a4c50;border-radius:14px;
+  box-shadow:inset 0 1px rgba(255,255,255,.06),0 9px 20px rgba(0,0,0,.25);
+}
+.ballGrid .ball:not(:disabled):hover{
+  border-color:#e7bc67;box-shadow:inset 0 1px rgba(255,255,255,.07),0 0 15px rgba(231,188,103,.15);
+}
+.ballGrid .ball:focus-visible{outline-offset:3px}
+.ballGrid .ball .cueBallName{color:#f1f4f1;font-size:10px}
+.ballGrid .ball .cueBallValue{color:#e7bc67;font-size:13px}
+.cueOrb{width:65px;height:65px;min-height:65px;max-width:80%}
+.ballGrid .ball.freeBallTile{
+  background:linear-gradient(145deg,#1e282d,#10161b)!important;
+  border-color:rgba(231,188,103,.31);
+}
+.ballGrid .ball.freeBallTile .cueBallName{color:#e7bc67}
+.controlDock{margin-top:9px}
+.controls{grid-template-columns:minmax(0,2.2fr) minmax(0,1fr)}
+.controls.century{grid-template-columns:minmax(0,2.2fr) minmax(0,1fr)}
+.missPrimary,.app.tableLandscape .missPrimary{
+  min-height:67px;background:linear-gradient(110deg,#ee203c,#ad122b)!important;
+  border:1px solid #fc556a!important;border-radius:13px;
+  box-shadow:inset 0 1px rgba(255,255,255,.19),0 11px 21px rgba(170,14,40,.25);
+}
+.controls .danger,.controls .secondary:not(.missPrimary){
+  background:linear-gradient(135deg,#1b292e,#0e171d);
+  border:1px solid #40545a;color:#fff;border-radius:13px;
+}
+.controls .danger:hover{border-color:#e7bc67}
+.recent{padding:13px 15px}
+.recentHead .label,.panelLabel,.sheetTitle{color:#f3d59c}
+.liveDot{background:#e72a43}
+.recentHead #newBtn{background:linear-gradient(145deg,#c5243d,#831324)}
+.logline{background:#132025;border-color:#314147;color:#bbc7c7}
+.panel,.passPanel,.winner,.sheet,.timerHero{
+  background:linear-gradient(150deg,#1a282c,#0d151a);
+  border-color:#526056;
+}
+.passTitle,.winner .eyebrow,.panelLabel{color:#e7bc67}
+.sheetHead{
+  background:linear-gradient(180deg,#1a282c 80%,rgba(26,40,44,.93));
+}
+.sheet{border-color:rgba(231,188,103,.38)}
+.field input:focus,.field select:focus,.seatPickerRow select:focus{
+  border-color:#e7bc67;box-shadow:0 0 0 2px rgba(231,188,103,.15);
+}
+.option.active,.tab.active,.filter.active{
+  border-color:#e7bc67;color:#f6da9e;background:#3d3323;
+}
+@media(min-width:700px){
+  .ballGrid{grid-template-columns:repeat(8,minmax(0,1fr));gap:10px}
+  .ballGrid .ball{height:139px}
+  .players.p2{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:699px) and (orientation:portrait){
+  .app,.app.tableLandscape{
+    padding:8px 10px calc(23px + env(safe-area-inset-bottom));
+    max-width:510px;
+  }
+  .top{flex-direction:column;align-items:stretch;gap:13px;padding:14px 12px}
+  .brandWrap{justify-content:center}
+  .brand{font-size:19px;letter-spacing:.09em}
+  .brandBadge{display:none}
+  .subtitle{font-size:8px;text-align:left;letter-spacing:.11em}
+  .logoOrb{width:47px;height:47px}
+  .mode{width:100%;min-width:0}
+  .mode button{min-height:44px;font-size:12px}
+  .toolbar{flex-wrap:wrap;gap:9px;padding:10px}
+  .toolbar .chips{width:100%;justify-content:flex-start}
+  .toolbar .actions{width:100%;justify-content:space-between}
+  .toolbar .iconBtn{flex:1 1 0;min-width:0;min-height:43px;height:43px;font-size:19px}
+  .chip{font-size:10px;padding:7px 9px}
+  .clubTimerRibbon{min-height:72px;margin:10px 0;padding:9px 10px 9px 13px}
+  .clubTimerRibbon .timerStartCue{min-height:46px}
+  .safetyBar{margin-bottom:10px}
+  .safetyBar button{min-height:44px;font-size:10px}
+  .players.p2{grid-template-columns:1fr;gap:10px}
+  .players.p3{grid-template-columns:1fr;gap:10px}
+  .players.p4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .player,.app.tableLandscape .player{
+    min-height:157px;padding:14px 15px;border-radius:16px;
+  }
+  .players.p4 .player{min-height:132px;padding:10px 11px}
+  .player .name{font-size:13px}
+  .player .score{font-size:61px;margin:12px 0 8px}
+  .players.p4 .player .score{font-size:42px}
+  .player .meta{font-size:11px}
+  .status{margin-top:10px;padding:12px 13px;gap:8px;font-size:11px}
+  .status b{font-size:14px}
+  .lastActionCard{padding:10px 13px}
+  .ballGrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:11px}
+  .ballGrid .ball{height:116px;padding:7px 3px}
+  .cueOrb{width:54px;height:54px;min-height:54px}
+  .ballGrid .ball .cueBallName{font-size:9px;margin-top:8px}
+  .ballGrid .ball .cueBallValue{font-size:12px}
+  .missPrimary{min-height:62px}
+  .recent{margin-top:11px;padding:12px}
+}
+@media(max-width:365px) and (orientation:portrait){
+  .brand{font-size:17px}
+  .subtitle{letter-spacing:.05em}
+  .chip{font-size:9px}
+  .ballGrid{gap:6px}
+  .ballGrid .ball{height:106px}
+  .cueOrb{width:47px;height:47px;min-height:47px}
+  .status{gap:6px}
+  .status b{font-size:12px}
+}
+@media(orientation:landscape) and (max-height:520px){
+  .app,.app.tableLandscape{max-width:none;padding:5px 10px 7px}
+  .top{padding:5px 10px;margin-bottom:6px}
+  .brand{font-size:16px}
+  .logoOrb{width:34px;height:34px}
+  .mode button{padding:6px 9px}
+  .toolbar{padding:5px 8px;margin-bottom:6px}
+  .clubTimerRibbon{min-height:44px;margin:5px 0 7px}
+  .player,.app.tableLandscape .player{min-height:0;padding:7px 10px}
+  .player .score{font-size:31px;margin:4px 0}
+  .status{padding:6px 9px;margin-top:6px}
+  .status b{font-size:12px}
+  .ballGrid{grid-template-columns:repeat(8,minmax(0,1fr))}
+  .ballGrid .ball{height:100px}
+  .cueOrb{width:44px;height:44px;min-height:44px}
+  .missPrimary,.app.tableLandscape .missPrimary{min-height:50px}
+  .recent{margin-top:6px}
+}
+@media(prefers-reduced-motion:reduce){
+  .ball,.player,.mode button,.iconBtn,.secondary,.primary{transition:none!important}
+}
+
 </style>
 </head>
 <body>
@@ -1031,7 +1299,7 @@ function safetyBarHTML(){return '<div class="safetyBar"><button type="button" id
 function cueBallHTML(name,value,color,penalty=false,award=false){return `<span class="cueOrb ${color}" aria-hidden="true"></span><span class="cueBallName">${esc(name)}</span><strong class="cueBallValue">${award?"+":penalty?"−":""}${value}</strong>`}
 function centuryHTML(){const pc=cState.players.length,act=cState.players[cState.active],players=displaySeatOrder("century").map((i,visual)=>{const p=cState.players[i];const left=Math.max(0,cSettings.target-p.score),pct=Math.max(0,Math.min(100,p.score/cSettings.target*100));return `<button class="player ${i===cState.active?"active":""}" data-cplayer="${i}"><div class="name">${playerNameHTML(cDisplayName(i),{...(cState.matchRefs?.[i]||cSettings.slots[i]),seatColor:cSettings.slots[visual]?.seatColor||defaultSeat(visual)})}</div><div class="score">${p.score}</div><div class="meta">${left} left · high ${p.best} ${typeBadgeHTML((cState.matchRefs?.[i]||cSettings.slots[i])?.kind)}</div><div class="progress"><i style="width:${pct}%"></i></div>${p.freeReds>0?`<div class="badge">FREE RED ×${p.freeReds}</div>`:""}</button>`}).join(""),chips=`<span class="chip">🎯 Target ${cSettings.target}</span>${cProtected()?`<span class="chip good">🛡 Protected</span>`:`<span class="chip">−10 Red Miss</span>`}`;let body=appHeader()+toolBar(cTL.past.length>0,cTL.future.length>0,chips)+timerRibbonHTML()+safetyBarHTML()+`<div class="players p${pc}">${players}</div>`;if(cState.winner!==null){body+=`<div class="winner"><div class="eyebrow">Winner</div><h2>${esc(cDisplayName(cState.winner))}</h2>${cState.players.map((p,i)=>`<div class="finalRow"><span>${esc(cDisplayName(i))}</span><b>${p.score} · high ${p.best}</b></div>`).join("")}<div class="two" style="margin-top:9px"><button class="primary" id="winnerNew">New game</button><button class="secondary" id="viewResult">View result</button></div></div>`}else{body+=`<div class="status"><span>Shooting <b>${esc(cDisplayName(cState.active))}</b></span><span>Visit <b>${cState.visit}</b></span><span>Needed <b>${Math.max(0,cSettings.target-act.score)}</b></span></div>`;body+=lastActionHTML(cState.log,"Ready for the next shot.");if(act.freeReds>0)body+=`<div class="passPanel"><div class="passTitle">${act.freeReds} free-red ${act.freeReds===1?"pass":"passes"}</div><div class="two"><button class="red ball" id="freePot">${cueBallHTML("Pot free red",10,"red")}</button><button class="secondary" id="freeMiss">Miss · spend 1</button></div></div>`;body+=`<div class="ballGrid">${[["Red",10,"red"],["Yellow",2,"yellow"],["Green",3,"green"],["Brown",4,"brown"],["Blue",5,"blue"],["Pink",6,"pink"],["Black",7,"black"]].map(([n,v,c])=>`<button class="ball ${c}" data-cpot="${v}" data-name="${n}" ${(subPanel==="cfoul"||cCanScore(v))?"":"disabled"}>${cueBallHTML(n,v,c,subPanel==="cfoul")}</button>`).join("")}<button class="ball missRedTile" id="missRed"><span class="cueOrb white missCueOrb" aria-hidden="true"><i>×</i></span><span class="cueBallName">MISS RED</span><strong class="cueBallValue">${cProtected()?"free passes":"−10 · end"}</strong></button></div><div class="controlDock"><div class="controls century"><button class="secondary missPrimary" id="missNext"><b>MISS / END TURN <span aria-hidden="true">›</span></b></button><button class="danger" id="foulToggle">${subPanel==="cfoul"?"Cancel foul":"Foul"}</button></div></div>${subPanel==="cfoul"?`<div class="panel"><div class="panelLabel">FOUL MODE · Tap a ball above to deduct its value from the shooter. Tap Cancel foul to exit.</div></div>`:""}`}body+=recentHTML(cState.log,4,"New game");return body}
 function sBallButton(name,value,cls,key){const foul=subPanel==="sfoul";return `<button class="ball ${cls}" data-spot="${key}" ${(foul||sCanPot(key))?"":"disabled"}>${cueBallHTML(name,foul?sFoulPenalty(value):value,cls,false,foul)}</button>`}function freePanelHTML(){const generic=sState.ballOn==="colour"&&!sState.clearance;return `<div class="panel"><div class="panelLabel">Free ball${generic?" · choose actual ball-on value":""}</div>${generic?`<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-bottom:7px">${[2,3,4,5,6,7].map(v=>`<button class="option ${freeBallOnValue===v?"active":""}" data-onv="${v}">${v}</button>`).join("")}</div>`:""}<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:5px">${colors.map(([k,n])=>`<button class="ball ${k}" style="height:46px" data-free="${k}" ${generic&&!freeBallOnValue?"disabled":""}><strong style="font-size:14px">${n.slice(0,3)}</strong></button>`).join("")}</div></div>`}
-function snookerHTML(){const chips=`<span class="chip">🔴 ${sState.reds} Reds</span><span class="chip good">${sState.respotted?"⚫ RESPOTTED BLACK":sState.ballOn==="colour"?"● COLOUR ON":"● "+String(sState.ballOn).toUpperCase()+" ON"}</span>`;let body=appHeader()+toolBar(sTL.past.length>0,sTL.future.length>0,chips)+timerRibbonHTML()+safetyBarHTML()+`<div class="players p2">${displaySeatOrder("snooker").map((i,visual)=>{const sc=sState.scores[i];return `<button class="player ${i===sState.active?"active":""}" data-splayer="${i}"><div class="name">${playerNameHTML(sDisplayName(i),{...(sState.matchRefs?.[i]||sSettings.slots[i]),seatColor:sSettings.slots[visual]?.seatColor||defaultSeat(visual)})}</div><div class="score">${sc}</div><div class="meta">${i===sState.active?"Break "+sState.break:"High "+sState.best[i]} ${typeBadgeHTML((sState.matchRefs?.[i]||sSettings.slots[i])?.kind)}</div></button>`}).join("")}</div>`;if(sState.winner!==null){body+=`<div class="winner"><div class="eyebrow">Frame winner</div><h2>${esc(sDisplayName(sState.winner))}</h2><div class="finalRow"><span>${esc(sDisplayName(0))}</span><b>${sState.scores[0]} · high ${sState.best[0]}</b></div><div class="finalRow"><span>${esc(sDisplayName(1))}</span><b>${sState.scores[1]} · high ${sState.best[1]}</b></div><div class="kicker">${esc(sState.reason||"")}</div><div class="two" style="margin-top:9px"><button class="primary" id="winnerNew">New frame</button><button class="secondary" id="viewResult">View result</button></div></div>`}else{const rem=sState.respotted?7:(sState.clearance?clearance.slice(Math.max(0,clearance.indexOf(sState.ballOn))).reduce((a,c)=>a+val[c],0):sState.reds*8+27+(sState.ballOn==="colour"?7:0));body+=`<div class="status"><span>Striker <b>${esc(sDisplayName(sState.active))}</b></span><span>Break <b>${sState.break}</b></span><span>Remaining <b>${rem}</b></span></div>`+lastActionHTML(sState.log,"Ready for the next shot.")+`<div class="ballGrid">${sBallButton("Red",1,"red","red")}${colors.map(([k,n,v])=>sBallButton(n,v,k,k)).join("")}</div><div class="controlDock"><div class="controls"><button class="secondary missPrimary" id="sMiss"><b>MISS / END TURN <span aria-hidden="true">›</span></b></button><button class="danger" id="sFoulToggle">${subPanel==="sfoul"?"Cancel foul":"Foul"}</button><button class="secondary" id="freeToggle" ${sState.respotted?"disabled":""}>Free ball</button></div></div>${subPanel==="sfoul"?`<div class="panel"><div class="panelLabel">FOUL MODE · Opponent gains 4–7 points. Select the highest-value ball involved, including the nominated ball on.</div></div>`:""}${subPanel==="free"?freePanelHTML():""}<div style="margin-top:8px;text-align:right"><button class="smallBtn" id="concede">Concede frame</button></div>`}body+=recentHTML(sState.log,5,"New frame");return body}
+function snookerHTML(){const chips=`<span class="chip">🔴 ${sState.reds} Reds</span><span class="chip good">${sState.respotted?"⚫ RESPOTTED BLACK":sState.ballOn==="colour"?"● COLOUR ON":"● "+String(sState.ballOn).toUpperCase()+" ON"}</span>`;let body=appHeader()+toolBar(sTL.past.length>0,sTL.future.length>0,chips)+timerRibbonHTML()+safetyBarHTML()+`<div class="players p2">${displaySeatOrder("snooker").map((i,visual)=>{const sc=sState.scores[i];return `<button class="player ${i===sState.active?"active":""}" data-splayer="${i}"><div class="name">${playerNameHTML(sDisplayName(i),{...(sState.matchRefs?.[i]||sSettings.slots[i]),seatColor:sSettings.slots[visual]?.seatColor||defaultSeat(visual)})}</div><div class="score">${sc}</div><div class="meta">${i===sState.active?"Break "+sState.break:"High "+sState.best[i]} ${typeBadgeHTML((sState.matchRefs?.[i]||sSettings.slots[i])?.kind)}</div></button>`}).join("")}</div>`;if(sState.winner!==null){body+=`<div class="winner"><div class="eyebrow">Frame winner</div><h2>${esc(sDisplayName(sState.winner))}</h2><div class="finalRow"><span>${esc(sDisplayName(0))}</span><b>${sState.scores[0]} · high ${sState.best[0]}</b></div><div class="finalRow"><span>${esc(sDisplayName(1))}</span><b>${sState.scores[1]} · high ${sState.best[1]}</b></div><div class="kicker">${esc(sState.reason||"")}</div><div class="two" style="margin-top:9px"><button class="primary" id="winnerNew">New frame</button><button class="secondary" id="viewResult">View result</button></div></div>`}else{const rem=sState.respotted?7:(sState.clearance?clearance.slice(Math.max(0,clearance.indexOf(sState.ballOn))).reduce((a,c)=>a+val[c],0):sState.reds*8+27+(sState.ballOn==="colour"?7:0));body+=`<div class="status"><span>Striker <b>${esc(sDisplayName(sState.active))}</b></span><span>Break <b>${sState.break}</b></span><span>Remaining <b>${rem}</b></span></div>`+lastActionHTML(sState.log,"Ready for the next shot.")+`<div class="ballGrid">${sBallButton("Red",1,"red","red")}${colors.map(([k,n,v])=>sBallButton(n,v,k,k)).join("")}<button class="ball freeBallTile" id="freeToggle" ${sState.respotted?"disabled":""}><span class="cueOrb white" aria-hidden="true"></span><span class="cueBallName">Free ball</span></button></div><div class="controlDock"><div class="controls"><button class="secondary missPrimary" id="sMiss"><b>MISS / END TURN <span aria-hidden="true">›</span></b></button><button class="danger" id="sFoulToggle">${subPanel==="sfoul"?"Cancel foul":"Foul"}</button></div></div>${subPanel==="sfoul"?`<div class="panel"><div class="panelLabel">FOUL MODE · Opponent gains 4–7 points. Select the highest-value ball involved, including the nominated ball on.</div></div>`:""}${subPanel==="free"?freePanelHTML():""}<div style="margin-top:8px;text-align:right"><button class="smallBtn" id="concede">Concede frame</button></div>`}body+=recentHTML(sState.log,5,"New frame");return body}
 function render(){document.title="CueScore · "+(mode==="century"?"Century":"Snooker");const app=document.getElementById("app");app.className="app"+(isTableLayout()?" tableLandscape":"");document.body.classList.toggle("table-landscape",isTableLayout());app.innerHTML=mode==="century"?centuryHTML():snookerHTML();bindMain();if(openPanel==="history"||openPanel==="settings"||openPanel==="timer"||openPanel==="seats")renderSheet()}
 function bindMain(){document.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>setMode(b.dataset.mode));const tb=document.getElementById("tableBtn");if(tb)tb.onclick=toggleTableMode;document.getElementById("clubTimerBtn").onclick=openTimer;document.getElementById("swapSeatsBtn").onclick=()=>scoreLocked?showToast("Unlock scoring first"):showSeatSwap();document.getElementById("swapSeatsQuick").onclick=()=>scoreLocked?showToast("Unlock scoring first"):showSeatSwap();const lockBtn=document.getElementById("scoreLockBtn");if(scoreLocked){let hold=null;const begin=e=>{e.preventDefault();if(hold!==null)return;hold=setTimeout(()=>{hold=null;setScoringLock(false);showToast("Scoring unlocked")},750)};const cancel=()=>{if(hold!==null)clearTimeout(hold);hold=null};lockBtn.onpointerdown=begin;lockBtn.onpointerup=cancel;lockBtn.onpointercancel=cancel;lockBtn.onpointerleave=cancel;lockBtn.onkeydown=e=>{if((e.key==="Enter"||e.key===" ")&&!e.repeat)begin(e)};lockBtn.onkeyup=e=>{if(e.key==="Enter"||e.key===" ")cancel()};lockBtn.onclick=e=>{e.preventDefault();if(scoreLocked)showToast("Hold to unlock")}}else lockBtn.onclick=()=>setScoringLock(true);document.getElementById("logBtn").onclick=()=>openHistory("log");document.getElementById("settingsBtn").onclick=openSettings;document.getElementById("viewAll").onclick=()=>openHistory("log");if(mode==="century"){document.getElementById("undoBtn").onclick=cUndo;document.getElementById("redoBtn").onclick=cRedo;document.querySelectorAll("[data-cplayer]").forEach(b=>b.onclick=()=>cSelect(Number(b.dataset.cplayer)));document.querySelectorAll("[data-cpot]").forEach(b=>b.onclick=()=>{const v=Number(b.dataset.cpot);if(subPanel==="cfoul"){subPanel=null;cFoul(v)}else cPot(b.dataset.name,v)});const fp=document.getElementById("freePot");if(fp)fp.onclick=()=>cPot("Red",10,true);const fm=document.getElementById("freeMiss");if(fm)fm.onclick=cFreeMiss;const mr=document.getElementById("missRed");if(mr)mr.onclick=cMissRed;const mn=document.getElementById("missNext");if(mn)mn.onclick=cMissNext;const ft=document.getElementById("foulToggle");if(ft)ft.onclick=()=>{if(scoreLocked){showToast("Scoring locked");return}subPanel=subPanel==="cfoul"?null:"cfoul";render()};const nb=document.getElementById("newBtn");if(nb)nb.onclick=()=>cState.winner!==null?cReset():(cHasProgress()?askConfirm("Start a new Century game and discard the current unfinished game?",cReset):cReset());const wn=document.getElementById("winnerNew");if(wn)wn.onclick=cReset;const vr=document.getElementById("viewResult");if(vr)vr.onclick=()=>openHistory("results")}else{document.getElementById("undoBtn").onclick=sUndo;document.getElementById("redoBtn").onclick=sRedo;document.querySelectorAll("[data-splayer]").forEach(b=>b.onclick=()=>sSelect(Number(b.dataset.splayer)));document.querySelectorAll("[data-spot]").forEach(b=>b.onclick=()=>{const ball=b.dataset.spot;if(subPanel==="sfoul"){subPanel=null;sFoul(ball==="red"?1:val[ball])}else sPot(ball)});const sm=document.getElementById("sMiss");if(sm)sm.onclick=sMiss;const sf=document.getElementById("sFoulToggle");if(sf)sf.onclick=()=>{if(scoreLocked){showToast("Scoring locked");return}subPanel=subPanel==="sfoul"?null:"sfoul";render()};const fr=document.getElementById("freeToggle");if(fr)fr.onclick=()=>{subPanel=subPanel==="free"?null:"free";freeBallOnValue=null;render()};document.querySelectorAll("[data-onv]").forEach(b=>b.onclick=()=>{freeBallOnValue=Number(b.dataset.onv);render()});document.querySelectorAll("[data-free]").forEach(b=>b.onclick=()=>{subPanel=null;sFreeBall(b.dataset.free)});const cc=document.getElementById("concede");if(cc)cc.onclick=()=>askConfirm("Concede this frame?",sConcede);const nb=document.getElementById("newBtn");if(nb)nb.onclick=()=>sState.winner!==null?sReset():(sHasProgress()?askConfirm("Start a new snooker frame and discard the current unfinished frame?",sReset):sReset());const wn=document.getElementById("winnerNew");if(wn)wn.onclick=sReset;const vr=document.getElementById("viewResult");if(vr)vr.onclick=()=>openHistory("results")}}
 document.getElementById("sheetBackdrop").addEventListener("click",e=>{if(e.target.id==="sheetBackdrop")closeSheet()});if(window.matchMedia){const mq=window.matchMedia("(orientation: landscape)");if(mq.addEventListener)mq.addEventListener("change",()=>{if(!tableMode)render()});else if(mq.addListener)mq.addListener(()=>{if(!tableMode)render()})}syncCResult();syncSResult();saveCentury();saveSnooker();render();setInterval(updateTimerDisplay,1000);document.addEventListener("visibilitychange",updateTimerDisplay);
